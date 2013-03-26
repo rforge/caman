@@ -1,0 +1,16 @@
+export("mixalg")
+export("mixalg.boot")
+export("mixalg.Boot")
+export("mixboot")
+
+export("mixalg.paraBoot")
+export("mixpboot")
+
+export("mixalg.EM")
+export("mixalg.VEM")
+
+export("mixcov")
+
+S3method(anova, CAMAN.object)
+S3method(summary, CAMAN.object)
+S3method(summary, CAMAN.glm.object)

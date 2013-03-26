@@ -1,11 +1,13 @@
 Package: CAMAN 
-Version: 0.64
-Date: 2008
+Version: 0.65
+Date: Mar 25 2013
 Title: Finite Mixture Models and metaanalysis tools - based on C.A.MAN
-Author: Peter Schlattmann <peter.schlattmann@charite.de>, Johannes Hoehne <johannes.hoehne@charite.de>
-Maintainer: Peter Schlattmann <peter.schlattmann@charite.de>, Johannes Hoehne <johannes.hoehne@charite.de>
-Description: package to perform meta analyses corresponding to C.A.MAN
+Author: Peter Schlattmann <peter.schlattmann@mti.uni-jena.de>, Johannes Hoehne 
+Maintainer: Philipp Doebler <philipp.doebler@googlemail.com>
+Description: Tools for the analysis of finite semiparametric mixtures. These are 
+useful when data is heterogeneous, e.g. in pharmacokinetics or meta-analysis. The 
+NPMLE and VEM algorithms (flexible support size) and EM algorithms (finite support 
+case) are provided.
 Depends: R (>= 1.4.0)
 License: GPL version 2 or newer
-URL: http://www.charite.de/biometrie
-Packaged: Mon Feb 23 22:11:23 2009; Johannes
+URL: http://r-forge.r-project.org/projects/caman/

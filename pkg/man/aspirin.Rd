@@ -1,13 +1,13 @@
 \name{aspirin}
 \docType{data}
 \alias{aspirin}
-\title{Meta-analysis and metaregression of aspirin use and breast cancer risk}
+\title{Aspirin use and breast cancer risk}
 \description{
-To examine the recent epidemiological studies on aspirin use and breast cancer risk published from 2001 to 2007 within a meta-analysis, to investigate reasons for heterogeneity between the individual studies. \cr
+This data set can be used to examine the recent epidemiological studies on aspirin use and breast cancer risk published from 2001 to 2007 within a meta-analysis, and to investigate reasons for heterogeneity between the individual studies. \cr
 
 We systematically searched for cohort-studies and case-control-studies from 2001-2007, which evaluated the association between aspirin and breast cancer risk. A total of 15 studies (seven cohort studies and eight case-control studies) met the inclusion criteria.
 }
-\usage{aspirin}
+\usage{data("aspirin")}
 \format{A data frame consisting of 15 data sets (rows) and 11 attributes (columns)}
 \examples{
 #Example
@@ -19,6 +19,6 @@ m0 <- mixcov(dep="logrr",fixed=c("type","yearc"),random="",weight=wgt,k=1,family
 
 }
 \references{
-Schlattmann, P.(2008) \emph{Medical Applications of Finite Mixture Models} Berlin: Springer
+Schlattmann, P.(2009) \emph{Medical Applications of Finite Mixture Models.} Berlin: Springer.
 }
 \keyword{datasets}
