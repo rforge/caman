@@ -8,11 +8,11 @@ A common problem in the estimation of mixture models is to determine the
 number of components. This may be done using a parametric bootstrap.
 This function simulates from a mixture model under the null hypothesis
 with \code{k0} components. A mixture model with k0 and usually k0 +1 components 
-is fit to the data and then the likelihood ratio statistic (LRS)is computed. \cr
+is fit to the data and then the likelihood ratio statistic (LRS) is computed. \cr
 
 Based on the bootstrap the distribution of the LRS is obtained which allows to obtain
 an approximation to the achieved level of significance corresponding to
-the value of -2 \log \xi obtained from the original sample.
+the value of \eqn{-2 \log \xi} obtained from the original sample.
 }
 
 
@@ -55,9 +55,9 @@ A CAMAN-object which quantifies another finite mixture model under the alterativ
 }
 
 \references{
-McLachlan and Peel, D. (2000) \emph{Finite Mixture Models}, Chichester: Wiley \cr
+McLachlan, G. and Peel, D. (2000). \emph{Finite Mixture Models}, Chichester: Wiley. \cr
 
-Schlattmann, P. (2008) \emph{Medical Applications of Finite Mixture Models}, Berlin: Springer
+Schlattmann, P. (2009). \emph{Medical Applications of Finite Mixture Models}. Berlin: Springer.
 }
 
 

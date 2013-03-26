@@ -524,7 +524,7 @@ return(res)
 
 
 
-summary.CAMAN.object <- function(object){
+summary.CAMAN.object <- function(object, ...){
 	cl <- match.call()
 	cat("Summary of a Computer Assisted Mixture Analysis: \n \n")
 	cat("Data consists of", object@num.obs, "observations (rows). \n")

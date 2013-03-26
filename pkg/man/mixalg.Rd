@@ -18,20 +18,20 @@ The algorithm proceeds as follows
 Step 1: Define an approximating grid \code{lambda[1], \dots, lambda[L]}
 
 Step 2: Use the VEM algorithm to maximize L(P) in the simplex
-\Omega and identify grid points with positive support. 
-Here positive support is defined as \code{p[j] >= \epsilon} (often \code{$\epsilon = 10^-2}).\cr
+\eqn{\Omega} and identify grid points with positive support. 
+Here positive support is defined as \code{p[j] >= epsilon} (often \code{epsilon = 10^-2}).\cr
 This gives an initial estimate of \code{k}.\cr
 
 Step 3: Use these \code{k} points and corresponding mixing weights
 p[j] as starting values for the EM algorithm
 
-Step 4: Collapse identical components if \code{| lambda[j]- lambda[i] | < \delta } (often \delta=0.05) for i != j
+Step 4: Collapse identical components if \code{| lambda[j]- lambda[i] | < delta } (often delta=0.05) for i != j
 
 Step 5: Obtain the final number of components \code{k}
 
 This sequential algorithm leads to an initial estimate of the  NPMLE
 and a proper solution for the subsequent EM algorithm. Crucial points are
-the definitions of \delta and \epsilon. Depending on these settings
+the definitions of \eqn{\delta} and \eqn{\epsilon}. Depending on these settings
 different solutions could result from this algorithm.
 }
 
@@ -108,13 +108,13 @@ Peter Schlattmann and Johannes Hoehne
 }
 
 \references{
-D. Böhning, P. Schlattmann, B.G. Lindsay: C.A.MAN - Computer Assisted
+D. B{\"o}hning, P. Schlattmann, B.G. Lindsay: C.A.MAN - Computer Assisted
 Analysis of Mixtures: Statistical Algorithms.\emph{Biometrics}, 1992, 48, 283-303
 
 P. Schlattmann: On bootstrapping the unknown number of components in
 finite mixtures of Poisson distributions. \emph{Statistics and Computing}, 2005, 15, 179-188
 
-Schlattmann, P. (2008) \emph{Medical Applications of Finite Mixture Models} Berlin: Springer
+Schlattmann, P. (2009). \emph{Medical Applications of Finite Mixture Models.} Berlin: Springer.
 }
 
 \examples{

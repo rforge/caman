@@ -11,7 +11,7 @@ illness spells are given in the data set.
 }
 \usage{data("thai_cohort")}
 \examples{
-data("thai_cohort"")
+data("thai_cohort")
 mix <- mixalg(obs="counts", weights="frequency", family="poisson",  data=thai_cohort, numiter=18000, acc=0.00001, startk=25)
 }
 \references{

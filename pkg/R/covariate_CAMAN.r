@@ -506,7 +506,7 @@ mix.densDistr <- function(mix){
 	
 	
 	
-	summary.CAMAN.glm.object <- function(object){
+	summary.CAMAN.glm.object <- function(object, ...){
 		cat("Summary of a Computer Assisted Mixture Analysis with covariates: \n \n")
 		cat("Data consists of", object@num.obs, "observations (rows). \n")
 		cat("The Mixture Analysis identified", object@num.k, "component")

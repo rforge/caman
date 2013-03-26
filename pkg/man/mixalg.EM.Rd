@@ -25,7 +25,7 @@ mixalg.EM (mix = NULL, p, t, obs = NULL, weights = NULL, family = "gaussian",
 A CAMAN-object which quantifies a finite mixture model and the input data.
 }
 \item{p}{ vector containing the starting values for p}
-\item{t}{ vector containing the starting values for the distribution specific parameters (poisson->\lambda, gaussian-> \mu)}
+\item{t}{ vector containing the starting values for the distribution specific parameters (poisson->\eqn{\lambda}, gaussian-> \eqn{\mu})}
     \item{obs}{
      observed / dependent variable. Vector or colname of \code{data}. Must be specified!
 	}

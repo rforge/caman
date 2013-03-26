@@ -42,7 +42,7 @@ Schlattmann, P.(2009) \emph{Medical Applications of Finite Mixture Models.} Berl
 
 These data have not been published yet but a related reference is
 
-Nierenberg DW, Stukel TA, Baron JA, Dain BJ, Greenberg ER (1989) \dQuote{Determinants of plasma levels of beta-carotene and retinol.}  \emph{American Journal of Epidemiology}, \bolf{130}, 511--521.
+Nierenberg DW, Stukel TA, Baron JA, Dain BJ, Greenberg ER (1989) \dQuote{Determinants of plasma levels of beta-carotene and retinol.}  \emph{American Journal of Epidemiology}, \bold{130}, 511--521.
 
 The use of the data is kindly permitted Dr. Therese Stukel, Dartmouth Hitchcock Medical Center, USA
 

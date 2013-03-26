@@ -11,6 +11,7 @@ export("mixalg.VEM")
 
 export("mixcov")
 
+S3method(hist, CAMAN.object)
 S3method(anova, CAMAN.object)
 S3method(summary, CAMAN.object)
 S3method(summary, CAMAN.glm.object)

@@ -12,7 +12,7 @@ case. For the flexible support size case the VEM-algorithm can be used.
 The algorithm proceeds as follows:\cr
 Step 1: Define an approximating grid lambda[1], \dots, lambda[L] \cr
 Step 2: Use the VEM algorithm to maximize \code{L(P)} in the simplex 
-\Omega and identify grid points with positive support. \cr
+\eqn{\Omega} and identify grid points with positive support. \cr
 }
 
 
