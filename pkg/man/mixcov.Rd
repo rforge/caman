@@ -29,10 +29,12 @@ Proceed until convergence is met.
 
 
 \usage{
-mixcov(dep, fixed, random = "", data, k, weight = NULL, pop.at.risk = NULL, 
-    var.lnOR = NULL, family = "gaussian", CLASS = F, maxiter = 50, 
-    acc = 10^-7, returnHomogeneousModel = FALSE) 
+mixcov(dep, fixed, random="", data, k, weight=NULL, pop.at.risk=NULL, 
+       var.lnOR=NULL, family="gaussian", maxiter=50, 
+       acc=10^-7, returnHomogeneousModel = FALSE) 
     }
+
+
 
 \arguments{ 
        \item{dep}{
@@ -62,15 +64,12 @@ mixcov(dep, fixed, random = "", data, k, weight = NULL, pop.at.risk = NULL,
   \item{var.lnOR}{
     variances of the data: These variances might be given when working with meta analyses! Vector or colname of \code{data}. Default is \code{NULL}.
    }
-  \item{limit}{
-    parameter to control the limit of union several components. Default is 0.01.
-}
- \item{acc}{
+ \item{maxiter}{
+  parameter to control the maximal number of iterations in the VEM and EM loops. Default is 5000. 
+ }
+\item{acc}{
 	convergence criterion. VEM and EM loops stop when deltaLL<acc. Default is 10^(-7). 
 }
- \item{maxiter}{
-	parameter to control the maximal number of iterations in the VEM and EM loops. Default is 5000. 
- }
   
   \item{returnHomogeneousModel}{
   boolean to indicate whether the homogeneous model (simple glm) should be returned too. Default is FALSE.

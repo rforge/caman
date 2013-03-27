@@ -11,6 +11,8 @@ export("mixalg.VEM")
 
 export("mixcov")
 
+export("getFDR")
+
 S3method(hist, CAMAN.object)
 S3method(anova, CAMAN.object)
 S3method(summary, CAMAN.object)

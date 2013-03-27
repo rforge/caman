@@ -4,7 +4,7 @@
 #				.Primitive("!")(x) else invisible(x)
 
 mixcov <- function(dep,fixed,random="",data,k,weight=NULL, pop.at.risk=NULL, 
-                   var.lnOR=NULL, family="gaussian",CLASS=F, maxiter=50, 
+                   var.lnOR=NULL, family="gaussian", maxiter=50, 
                    acc=10^-7, returnHomogeneousModel = FALSE)
 {
     cl <- match.call()
@@ -282,7 +282,9 @@ mix.perform_glm <- function(form,data,k,p=NULL,y,b=NULL,
 #			cat ("diffLL=", diffLL, "\n")
 			# new coefficients
 
-			m1<-glm(form,family=family,weights=wgt,start=b,x=TRUE,data=dataExpanded, offset=expect)
+			m1<-glm(form,family=family,weights=wgt,
+              start=b,x=TRUE,
+              data=dataExpanded, offset=expect)
 			b<-coef(m1)
 			if(is.null(weight) && family=="gaussian"){
 			  	residVar <- deviance(m1)/nn #residualvariance
@@ -294,7 +296,8 @@ mix.perform_glm <- function(form,data,k,p=NULL,y,b=NULL,
 			xf <- computeDensities(family, y, pre, residVar, k, nn)
 			
 			# new mixing weights	
-			fitW <- glm(pPosteriori~Z, family = gaussian, data = dataExpanded, na.action = na.omit)
+			fitW <- glm(pPosteriori~Z, family = gaussian, data = dataExpanded, 
+                  na.action = na.omit)
 			wp <- predict(fitW)
 			
 			#calculate mixture density
@@ -411,16 +414,15 @@ computeDensities <- function(family, y, pre, residVar, k, nn){
 # warum wird die vorletzte Iteration zur?ckgegeben?
 
 
-objectShow <- function(){
-	cat("\n", "Mixing weights: ", round(p, 4), "\n")
-	cat("\n", "Coefficients: ", round(p, 4), "\n")
-	cat("\n", "Common effect: ", meancoef, "\n")
-	cat("\n", "Heterogeneity variance: ", hetvar)
-	cat("\n", "Heterogeneity STD: ", sqrt(hetvar))
-	cat("\n", "log-likelihood at iterate:",logem,"\n")
-	cat("\n", "BIC ",-2*logem+log(nn)*(length(b)+k-1),"\n")	
-	
-}
+# objectShow <- function(){
+# 	cat("\n", "Mixing weights: ", round(p, 4), "\n")
+# 	cat("\n", "Coefficients: ", round(p, 4), "\n")
+# 	cat("\n", "Common effect: ", meancoef, "\n")
+# 	cat("\n", "Heterogeneity variance: ", hetvar)
+# 	cat("\n", "Heterogeneity STD: ", sqrt(hetvar))
+# 	cat("\n", "log-likelihood at iterate:",logem,"\n")
+# 	cat("\n", "BIC ",-2*logem+log(nn)*(length(b)+k-1),"\n")		
+# }
 
 
 

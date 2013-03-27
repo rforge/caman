@@ -88,7 +88,11 @@ if (res@steps[2] >= res@otherParams[2]) {
 }
 
 
-anova.CAMAN.object <- function(mix0, mix1, nboot=2500, limit=0.01, acc=10^(-7), numiter=5000, giveBootstrapData=FALSE, giveLikelihood=FALSE){ 
+anova.CAMAN.object <- function(object, object1, nboot=2500, limit=0.01, 
+                               acc=10^(-7), numiter=5000, 
+                               giveBootstrapData=FALSE, giveLikelihood=FALSE, ...){ 
+mix0 <- object
+mix1 <- object1
 #compute LL-ratio:
 # simulate data from mix0 and compare LL of mix0 and mix1 based on this data   
 	cl <- match.call()	
@@ -155,7 +159,9 @@ res <- list()
 LL_ratios <- sort(-2*(LL0 - LL1))  #90, 95, 97.5, 99 - quartils
 LL_ratio_quartils <- LL_ratios[floor(c(.9, .95, .975, .99)*nboot)]
 names(LL_ratio_quartils) <- c(.9, .95, .975, .99)
-res$overview <- data.frame(c(as.character(cl$mix0), as.character(cl$mix1)), c(mix0@num.k, mix1@num.k), c(mix0@BIC, mix1@BIC), c(mix0@LL, mix1@LL), c(NA, -2*(mix0@LL - mix1@LL)))
+res$overview <- data.frame(c(as.character(cl$object), as.character(cl$object1)), 
+                           c(mix0@num.k, mix1@num.k), c(mix0@BIC, mix1@BIC), 
+                           c(mix0@LL, mix1@LL), c(NA, -2*(mix0@LL - mix1@LL)))
 names(res$overview) = c("mixture model","k","BIC","LL", "LL-ratio")
 res$"LL ratios in bootstrap-data" <- LL_ratio_quartils
 res$"simulated p-value" <- sum(LL_ratios > (-2*(mix0@LL - mix1@LL)) )/nboot
@@ -275,7 +281,7 @@ mixalg.boot <- function(mix, nboot=500, limit=0.01, acc=10^(-5), numiter=5000, s
 
 mixalg.EM <- function(mix = NULL, p, t, obs=NULL, weights=NULL, family="gaussian", 
                       data=NULL, pop.at.risk=NULL, var.lnOR=NULL,  limit=0.01, 
-                      acc=10^(-7), numiter=5000, giveProb=TRUE){
+                      acc=10^(-7), numiter=5000){
     # computes the seconde (EM-) part of the CAMAN algorithm: 
     # use manualy defined values for p, t &  k and 
     #   --> refiend soultion with EM algorithm 
@@ -433,36 +439,36 @@ mixalg.VEM <- function(mix = NULL, obs=NULL, weights=NULL, data=NULL, pop.at.ris
 }
 
 
-#
-#mix.densDistr <- function(mix){
-#    # computes the probability for each observation (1..n - row of mix@dat) belonging to each component (1..k)
-#    # returns a matrix of dimension n x k
-#    dat <- mix@dat[,1]
-#    res <- matrix(ncol=mix@num.k, nrow=length(dat))
-#    p <- mix@p
-#   if (mix@family == "gaussian") {
-#        mu <- mix@t
-#        mix.sd <- sqrt(mix@component.var)
-#        for (i in 1:mix@num.k) res[,i] <- sapply(dat,
-#			function(x){p[i]*dnorm(x, mu[i], mix.sd ) / sum(p*dnorm(x, mu,
-#			mix.sd ))})
-#        }
-#   if (mix@family == "binomial") {
-#        prob <- mix@t
-#        popAtRisk <- mix@dat[,3]
-#        for (i in 1:mix@num.k) res[,i] <- apply(cbind(dat, popAtRisk), 1,
-#			function(x){p[i]*dbinom(x[1], x[2], prob[i]) / sum(p*dbinom(x[1],
-#			x[2], prob))})
-#        }
-#   if (mix@family == "poisson") {
-#        lambda <-  mix@t
-#        popAtRisk <- mix@dat[,3]
-#        for (i in 1:mix@num.k) res[,i] <- apply(cbind(dat, popAtRisk), 1, 
-#					function(x){p[i]*dpois(x[1], x[2]* lambda[i]) / 
-#								sum(p*dpois(x[1], x[2] * lambda))})
-#        }
-#    return(res)
-#}
+
+mix.densDistr <- function(mix){
+   # computes the probability for each observation (1..n - row of mix@dat) belonging to each component (1..k)
+   # returns a matrix of dimension n x k
+   dat <- mix@dat[,1]
+   res <- matrix(ncol=mix@num.k, nrow=length(dat))
+   p <- mix@p
+  if (mix@family == "gaussian") {
+       mu <- mix@t
+       mix.sd <- sqrt(mix@component.var)
+       for (i in 1:mix@num.k) res[,i] <- sapply(dat,
+			function(x){p[i]*dnorm(x, mu[i], mix.sd ) / sum(p*dnorm(x, mu,
+			mix.sd ))})
+       }
+  if (mix@family == "binomial") {
+       prob <- mix@t
+       popAtRisk <- mix@dat[,3]
+       for (i in 1:mix@num.k) res[,i] <- apply(cbind(dat, popAtRisk), 1,
+			function(x){p[i]*dbinom(x[1], x[2], prob[i]) / sum(p*dbinom(x[1],
+			x[2], prob))})
+       }
+  if (mix@family == "poisson") {
+       lambda <-  mix@t
+       popAtRisk <- mix@dat[,3]
+       for (i in 1:mix@num.k) res[,i] <- apply(cbind(dat, popAtRisk), 1, 
+					function(x){p[i]*dpois(x[1], x[2]* lambda[i]) / 
+								sum(p*dpois(x[1], x[2] * lambda))})
+       }
+   return(res)
+}
 
 
 getFDR <- function(dat, threshold=.7, idxNotDiff=1 ){

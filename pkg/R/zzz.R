@@ -1,7 +1,5 @@
-.First.lib <- function(lib, pkg)
+.onLoad <- function(libname, pkgname)
 { 
     # Load dll:
-    library.dynam("CAMAN", pkg, lib)
-    
-
+    library.dynam("CAMAN", pkgname, libname)
 }

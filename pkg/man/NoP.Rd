@@ -9,7 +9,8 @@ Ames test data where a strain of SalmonellaTA98 was activated with a homogenate 
 \format{A data frame with 100 rows and 3 columns (dose, count, logd)}
 \examples{
 data(NoP)
-ames3 <- mixcov(dep="count",fixed=c("dose", "logd"),random="",data=NoP,k=3,family="poisson")
+ames3 <- mixcov(dep="count",fixed=c("dose", "logd"),random="",data=NoP,
+                k=3,family="poisson")
 }
 \references{
 Margolin, B. H., B. S. Kim, and K. J. Risko. (1989). \dQuote{The Ames Salmonella Microsome Mutagenicity Assay: Issues of Inference and Validation.} \emph{Journal of the American Statistical Association} \bold{84}, 651--661.

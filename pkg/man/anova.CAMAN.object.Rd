@@ -17,16 +17,19 @@ the value of \eqn{-2 \log \xi} obtained from the original sample.
 
 
 \usage{
-anova.CAMAN.object(mix0, mix1, nboot=2500, limit=0.01, acc=10^(-7), numiter=5000, giveBootstrapData=FALSE, giveLikelihood=FALSE)
+\method{anova}{CAMAN.object}(object, object1, nboot=2500, limit=0.01, acc=10^(-7), numiter=5000, giveBootstrapData=FALSE, giveLikelihood=FALSE, ...)
 }
 
 \arguments{
 the parameters \code{limit, acc} and \code{numiter} are used for the VEM algorithm in each bootstrap sample.
-\item{mix0}{
+\item{object}{
 A CAMAN-object which quantifies a finite mixture model under null hypothesis.
 }
-\item{mix1}{
+\item{object1}{
 A CAMAN-object which quantifies another finite mixture model under the alterative hypothesis.
+}
+\item{nboot}{
+Number of bootstrap samples.
 }
      \item{limit}{
     parameter to control the limit of union several components. Default is 0.01.
@@ -42,6 +45,9 @@ A CAMAN-object which quantifies another finite mixture model under the alterativ
   }
   \item{giveLikelihood}{
   Return the likelihood-values of both models for each generated dataset.
+  }
+  \item{...}{
+  Arguments to be passed on to other methods; currently none.
   }
 }
 

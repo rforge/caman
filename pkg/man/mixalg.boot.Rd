@@ -1,5 +1,10 @@
 \name{mixalg.boot}
 \alias{mixalg.boot}
+\alias{mixalg.Boot}
+\alias{mixalg.paraBoot}
+\alias{mixboot}
+\alias{mixpboot}
+
 
 \title{bootstrap replication / validation of finite mixture models}
 
@@ -56,7 +61,9 @@ number of bootstrap replications}
     \item{$numk.boot}{ number of components obtained in replications.}
 }
 
-
+\note{
+\code{mixalg.Boot},  \code{mixalg.paraBoot}, \code{mixboot} and \code{mixpboot} are all deprecated names for the \code{mixalg.boot} function.
+}
 
 \author{
 Peter Schlattmann and Johannes Hoehne   
@@ -69,12 +76,10 @@ data(thai_cohort)
 m.thai<- mixalg(obs="counts",weights="frequency",family="poisson",data=thai_cohort)
 #boot <- mixalg.boot(m.thai, nboot=1000) #may take a few minutes
 
-
-
 ### POISSON data with observed and expected data: hepab
 data(hepab)
 mix <- mixalg(obs="observations",pop.at.risk="expected",family= "poisson",data=hepab)
-boot <- mixalg.boot(mix, nboot=1000) #may take some time 
+boot <- mixalg.boot(mix, nboot=250) #may take some time 
 table(boot$numk.boot)
 }
 

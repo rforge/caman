@@ -134,7 +134,7 @@ idxALL <- which(sample.labels== "ALL")
 idxAML <- which(sample.labels == "AML")
 pvals <- apply(golubMerge.exprs, 1, function(x){t.test(x[idxAML],x[idxALL])[[3]]})
 zvals <- qnorm(1-pvals)
-#hist(zvals,100)
+hist(zvals,100)
 ### Z-values are gaussian distributed, mix identifies a mixture of gaussians. 
 mix <- mixalg(obs=zvals, family="gaussian", startk=25)
 hist(mix)

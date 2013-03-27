@@ -3,13 +3,14 @@
 # Author: Johannes
 ###############################################################################
 
-hist.CAMAN.object <- function(object, nbreaks=NULL, mixdens=T, mixdens.col="red", 
-                              return.mixdens=FALSE, data.plot=NA, singleDistr=T, 
+hist.CAMAN.object <- function(x, nbreaks=NULL, mixdens=TRUE, mixdens.col="red", 
+                              return.mixdens=FALSE, data.plot=NULL, singleDistr=TRUE, 
                               main="", xlab="", plotlegend=TRUE, ...){
+  object <- x
 	#plots an histogram and the determined distribution of the mixture model 
 	if (is.null (nbreaks)) {nbreaks = min(60,max(30,object@num.obs))}
 	manualData <- FALSE
-	if (is.na(data.plot)){
+	if (is.null(data.plot)){
 		if (object@family == "poisson") data.plot <- object@dat[,1]/object@dat[,2]
 		else if (object@family == "binomial") data.plot <- object@dat[,1]/object@dat[,3]
 		else if (object@family == "gaussian") data.plot <- object@dat[,1]         

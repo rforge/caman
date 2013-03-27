@@ -16,7 +16,7 @@ of the EM algorithm.
 \usage{
 mixalg.EM (mix = NULL, p, t, obs = NULL, weights = NULL, family = "gaussian", 
     data = NULL, pop.at.risk = NULL, var.lnOR = NULL, limit = 0.01, 
-    acc = 10^(-7), numiter = 5000, giveProb = TRUE)    
+    acc = 10^(-7), numiter = 5000)    
 }
 
 
@@ -53,10 +53,6 @@ A CAMAN-object which quantifies a finite mixture model and the input data.
  \item{numiter}{
 	parameter to control the maximal number of iterations in the VEM and EM loops. Default is 5000. 
  }
-  \item{startk}{
-   starting/maximal number of components. This number will be used to compute the grid in the VEM. Default is 50.
-  }
-  
 }
 
 
@@ -74,7 +70,7 @@ Peter Schlattmann and Johannes Hoehne
 \examples{
 data(vitA)
 m1<-mixalg.EM(obs="logrr",var.lnOR="var" ,family="gaussian",p=c(1),t=c(0),data=vitA)
-m2<-mixalg.EM(obs="logrr",var.lnOR="var" ,family="gaussian",p=c(0.5,0.5),t=c(-0.3,0.2),data=vitA) \cr
+m2<-mixalg.EM(obs="logrr",var.lnOR="var" ,family="gaussian",p=c(0.5,0.5),t=c(-0.3,0.2),data=vitA)
 
 # apply EM-algorithm on an existing CAMAN.object: 
 data(thai_cohort)
