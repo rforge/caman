@@ -215,6 +215,8 @@ mixcov <- function(dep,fixed,random="",data,k,weight=NULL, pop.at.risk=NULL,
 mix.perform_glm <- function(form,data,k,p=NULL,y,b=NULL,
                             expected=NULL, var=NULL,weight=NULL,family="gaussian", 
                             shuffle=FALSE, maxiter=30, acc=10^-7)
+  
+## PD: argument shuffle is redundant right now, but doesn't hurt
 {
 	nn<-length(data[,1])  #length of !!non-expanded!! data
 # data augmentation
@@ -315,37 +317,38 @@ mix.perform_glm <- function(form,data,k,p=NULL,y,b=NULL,
 		}
 		x <- m1$x
 		# emgb
-		if (shuffle){
-			if(is.null(weight))wt<-residVar
-			
-			s1<-apply(wp*xf,2,sum)
-			tmax<-my_grad(y0,s1,wt,x0,kk=40,family)
-			if(family=="gaussian")
-				temp<-dnorm(y0,tmax,sqrt(wt))
-			else if (family=="poisson")
-				temp<-dpois(y0,tmax) 
-#			cat("\n","SA max", tmax,"\n")
-			
-			for(i in 1:k){
-				llnu[i]=sum(log(s1-p[i]*xf[i,]+p[i]*temp))
-			}
-			ix<-which.max(llnu)
-			coef[ix]<-tmax
-			b<-coef(m1)
-			pre<-x%*%b
-			xf <- computeDensities(family, y, pre, residVar, k, nn)
-			s1<- apply(xf*wp, 2,sum)
-			tt<-exp(log(wp)+log(xf))
-			logs1<-apply(tt,2,lse)
-			
-			wt<-residVar ###???
-			residVar<-wt
-			delta_acc <-  abs(oldlog - logl)
-			if ((delta_acc < 10^-6) || (n_shuffled >= maxiter)) continue_iterate = FALSE  #convergence criterio fulfilled
-			else continue_iterate = TRUE #convergence criterion not fulfilled --> continue!
-			oldlog<-log1 
-			}
-		else continue_iterate = FALSE  #there was no shuffeling, so just make one iteration and 
+## PD: I removed the complete shuffle block since it isn't working.
+# 		if (shuffle){
+# 			if(is.null(weight))wt<-residVar
+# 			
+# 			s1<-apply(wp*xf,2,sum)
+# 			tmax<-my_grad(y0,s1,wt,x0,kk=40,family)
+# 			if(family=="gaussian")
+# 				temp<-dnorm(y0,tmax,sqrt(wt))
+# 			else if (family=="poisson")
+# 				temp<-dpois(y0,tmax) 
+# #			cat("\n","SA max", tmax,"\n")
+# 			
+# 			for(i in 1:k){
+# 				llnu[i]=sum(log(s1-p[i]*xf[i,]+p[i]*temp))
+# 			}
+# 			ix<-which.max(llnu)
+# 			coef[ix]<-tmax
+# 			b<-coef(m1)
+# 			pre<-x%*%b
+# 			xf <- computeDensities(family, y, pre, residVar, k, nn)
+# 			s1<- apply(xf*wp, 2,sum)
+# 			tt<-exp(log(wp)+log(xf))
+# 			logs1<-apply(tt,2,lse)
+# 			
+# 			wt<-residVar ###???
+# 			residVar<-wt
+# 			delta_acc <-  abs(oldlog - logl)
+# 			if ((delta_acc < 10^-6) || (n_shuffled >= maxiter)) continue_iterate = FALSE  #convergence criterio fulfilled
+# 			else continue_iterate = TRUE #convergence criterion not fulfilled --> continue!
+# 			oldlog<-log1 
+# 			}
+# 		else continue_iterate = FALSE  #there was no shuffeling, so just make one iteration and 
 	}
 	#cat("residualvarianz: ", residVar)
 suppressWarnings(return(list(m1 = m1,p=p,pPosteriori = pPosteriori,xf = xf,x=x,logl = logl,

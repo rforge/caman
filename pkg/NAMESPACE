@@ -3,9 +3,6 @@ export("mixalg.boot")
 export("mixalg.Boot")
 export("mixboot")
 
-export("mixalg.paraBoot")
-export("mixpboot")
-
 export("mixalg.EM")
 export("mixalg.VEM")
 

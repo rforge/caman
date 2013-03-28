@@ -1,9 +1,7 @@
 \name{mixalg.boot}
 \alias{mixalg.boot}
 \alias{mixalg.Boot}
-\alias{mixalg.paraBoot}
 \alias{mixboot}
-\alias{mixpboot}
 
 
 \title{bootstrap replication / validation of finite mixture models}
@@ -62,7 +60,7 @@ number of bootstrap replications}
 }
 
 \note{
-\code{mixalg.Boot},  \code{mixalg.paraBoot}, \code{mixboot} and \code{mixpboot} are all deprecated names for the \code{mixalg.boot} function.
+\code{mixalg.Boot} and \code{mixboot}  are deprecated names for the \code{mixalg.boot} function.
 }
 
 \author{
