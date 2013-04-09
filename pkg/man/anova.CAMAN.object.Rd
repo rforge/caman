@@ -17,7 +17,8 @@ the value of \eqn{-2 \log \xi} obtained from the original sample.
 
 
 \usage{
-\method{anova}{CAMAN.object}(object, object1, nboot=2500, limit=0.01, acc=10^(-7), numiter=5000, giveBootstrapData=FALSE, giveLikelihood=FALSE, ...)
+\method{anova}{CAMAN.object}(object, object1, nboot=2500, limit=0.01, acc=10^(-7), 
+                 numiter=5000, giveBootstrapData=FALSE, giveLikelihood=FALSE, ...)
 }
 
 \arguments{
@@ -74,10 +75,11 @@ Peter Schlattmann and Johannes Hoehne
 
 \examples{
 data(thai_cohort)
-mix0 <- mixalg(obs="counts", weights="frequency", family="poisson",  data=thai_cohort, numiter=18000, acc=0.00001,startk=25)
+mix0 <- mixalg(obs="counts", weights="frequency", family="poisson", data=thai_cohort,
+               numiter=18000, acc=0.00001,startk=25)
 em0<-mixalg.EM(mix0,p=c(1),t=c(1))
 em1<-mixalg.EM(mix0,p=c(0.7,0.3),t=c(2,9))
-ll<-anova(em0,em1,nboot=250) #might take some minutes
+\dontrun{ll<-anova(em0,em1,nboot=250)} #might take some minutes
 }
 
 \keyword{meta-analysis}

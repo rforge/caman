@@ -9,8 +9,8 @@ Graphical display of the data and the mixture. Intended for larger data sets.
 
 \usage{
 \method{hist}{CAMAN.object}(x, nbreaks=NULL, mixdens=TRUE, mixdens.col="red", 
-                            return.mixdens=FALSE, data.plot=NULL, singleDistr=TRUE, 
-                            main="", xlab="", plotlegend=TRUE, ...)
+                return.mixdens=FALSE, data.plot=NULL, singleDistr=TRUE, 
+                main="", xlab="", plotlegend=TRUE, ...)
 }
 \arguments{
 \item{x}{A \code{CAMAN.object}.}

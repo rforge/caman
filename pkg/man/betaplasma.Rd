@@ -12,29 +12,30 @@ who had an elective surgical procedure during a three-year period to biopsy or
 remove a lesion of the lung, colon, breast, skin, ovary or uterus that was found to be non-cancerous. 
 }
 \usage{data("betaplasma")}
-\format{datafile contains 315 observations on 14 variables.  This data set can be used to demonstrate multiple regression, transformations, categorical variables, outliers, pooled tests of significance and model building strategies. 
+\format{datafile contains 315 observations on 15 variables.  This data set can be used to demonstrate multiple regression, transformations, categorical variables, outliers, pooled tests of significance and model building strategies. 
 \describe{
 Variable Names in order from left to right:
-        \item{AGE}{Age (years)} \cr
-        \item{SEX}{Sex (1=Male, 2=Female).} \cr
-        \item{SMOKSTAT}{Smoking status (1=Never, 2=Former, 3=Current Smoker)} \cr
-        \item{QUETELET}{Quetelet (weight/(height^2))} \cr
-        \item{VITUSE}{Vitamin Use (1=Yes, fairly often, 2=Yes, not often, 3=No)} \cr
-        \item{CALORIES}{Number of calories consumed per day.} \cr
-        \item{FAT}{Grams of fat consumed per day.} \cr
-        \item{FIBER}{Grams of fiber consumed per day.} \cr
-        \item{ALCOHOL}{Number of alcoholic drinks consumed per week.} \cr
-        \item{CHOLESTEROL}{Cholesterol consumed (mg per day).} \cr
-        \item{BETADIET}{Dietary beta-carotene consumed (mcg per day).} \cr
-        \item{RETDIET}{Dietary retinol consumed (mcg per day)} \cr
-        \item{BETAPLASMA}{Plasma beta-carotene (ng/ml)} \cr
-        \item{RETPLASMA}{Plasma Retinol (ng/ml)} \cr
-        \item{LOGBPL}{log(betaplasma)} \cr
+        \item{item}{participant id} \cr
+        \item{age}{Age (years)} \cr
+        \item{sex}{Sex, Factor with 2 levels (M=Male, F=Female).} \cr
+        \item{smokestat}{Smoking status, Factor with 3 levels (Never, Former, Current Smoker)} \cr
+        \item{bmi}{body mass index (weight/(height^2))} \cr
+        \item{vituse}{Vitamin Use, Factor with 3 levels (Yes (fairly often), Yes (not often), No)} \cr
+        \item{calories}{Number of calories consumed per day.} \cr
+        \item{fat}{Grams of fat consumed per day.} \cr
+        \item{fiber}{Grams of fiber consumed per day.} \cr
+        \item{alcohol}{Number of alcoholic drinks consumed per week.} \cr
+        \item{chol}{Cholesterol consumed (mg per day).} \cr
+        \item{betadiet}{Dietary beta-carotene consumed (mcg per day).} \cr
+        \item{retdiet}{Dietary retinol consumed (mcg per day)} \cr
+        \item{betacaro}{Plasma beta-carotene (ng/ml)} \cr
+        \item{retplasma}{Plasma Retinol (ng/ml)} \cr
 }
 }
 \examples{
 data(betaplasma)
-beta4 <- mixcov(dep="betacaro",fixed=c("chol","sex","bmi"),random="betadiet",data=betaplasma,k=4,family="gaussian")
+beta4 <- mixcov(dep="betacaro", fixed=c("chol","sex","bmi"), random="betadiet",
+                data=betaplasma,k=4,family="gaussian")
 
 }
 \references{

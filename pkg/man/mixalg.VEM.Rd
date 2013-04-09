@@ -17,7 +17,9 @@ Step 2: Use the VEM algorithm to maximize \code{L(P)} in the simplex
 
 
 \usage{
-mixalg.VEM(mix = NULL, obs=NULL, weights=NULL, data=NULL, pop.at.risk=NULL, var.lnOR=NULL, family="gaussian", limit=0.01, acc=10^(-7), numiter=5000, startk=50)    
+mixalg.VEM(mix = NULL, obs=NULL, weights=NULL, data=NULL, pop.at.risk=NULL, 
+           var.lnOR=NULL, family="gaussian", limit=0.01, acc=10^(-7), 
+           numiter=5000, startk=50)    
 }
 
 

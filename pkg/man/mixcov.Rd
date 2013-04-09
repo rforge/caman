@@ -120,17 +120,19 @@ Peter Schlattmann and Johannes Hoehne
   sex =sample(c("m","w"), 70, replace=TRUE)
   salary[sex=="m"] = salary[sex=="m"] * 1.2 #men earn 20 percent more than women
   salaryData = data.frame(salary=salary, age=age, sex=sex)
-    
-  tstSalary <-mixcov(dep="salary",fixed="sex",random="age",data=salaryData,k=3,family="gaussian", acc=10^-3)
+  tstSalary <- mixcov(dep="salary", fixed="sex", random="age" ,data=salaryData,
+                      k=3,family="gaussian", acc=10^-3)
  
 
 ### POISSON data:
 data(NoP)
-ames3 <- mixcov(dep="count",fixed=c("dose", "logd"),random="",data=NoP,k=3,family="poisson")
+ames3 <- mixcov(dep="count",fixed=c("dose", "logd"),random="",data=NoP,
+                k=3,family="poisson")
 
 ### Gaussian data
-data(ret)
-beta4 <- mixcov(dep="betaplasma",fixed=c("chol","sex","bmi"),random="betadiet",data=ret,k=4,family="gaussian")
+data(betaplasma)
+beta4 <- mixcov(dep="betacaro", fixed=c("chol","sex","bmi"), random="betadiet",
+                data=betaplasma, k=4, family="gaussian")
 }
 
 \keyword{meta-analysis, covariates, mixture model}

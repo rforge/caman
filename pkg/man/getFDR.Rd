@@ -13,7 +13,7 @@ getFDR(dat, threshold = 0.7, idxNotDiff = 1)
 %- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{dat}{
-A mixtures, i.e. a \code{CAMAN.object}.
+A mixture, i.e. a \code{CAMAN.object}.
 }
   \item{threshold}{
 numeric, should be between 0 and 1 to be meaningful.

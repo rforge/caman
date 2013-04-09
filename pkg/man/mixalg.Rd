@@ -37,7 +37,8 @@ different solutions could result from this algorithm.
 
 
 \usage{
-mixalg(obs, weights=NULL, family="gaussian", data=NULL, pop.at.risk=NULL, var.lnOR=NULL, limit=0.01, acc=10^(-7), numiter=5000, startk=50)
+mixalg(obs, weights=NULL, family="gaussian", data=NULL, pop.at.risk=NULL, 
+       var.lnOR=NULL, limit=0.01, acc=10^(-7), numiter=5000, startk=50)
 }
 
 
@@ -120,7 +121,8 @@ Schlattmann, P. (2009). \emph{Medical Applications of Finite Mixture Models.} Be
 \examples{
 ### POISSON data with weights: thai_cohort
 data(thai_cohort)
-mix <- mixalg(obs="counts", weights="frequency", family="poisson",  data=thai_cohort, numiter=18000, acc=0.00001, startk=25)
+mix <- mixalg(obs="counts", weights="frequency", family="poisson", 
+              data=thai_cohort, numiter=18000, acc=0.00001, startk=25)
 
 
 # meta analysis
@@ -141,7 +143,14 @@ hist(mix)
 
 ### get False discovery rate (Not-differential expressed genes are in component 1)
 getFDR(mix, threshold=.4)
-   
+
+#### disease mapping
+data(leukDat)
+data(GDRmap) # this is the map of the former GDR
+mix.leuk <- mixalg(obs = "oleuk", pop.at.risk = "eleuk",
+                   data = leukDat, family = "poisson")
+mix.leuk
+plot(GDRmap, col = mix.leuk@classification)                      
 }
 
 \keyword{meta-analysis, mixture model, mix}

@@ -12,7 +12,8 @@ illness spells are given in the data set.
 \usage{data("thai_cohort")}
 \examples{
 data("thai_cohort")
-mix <- mixalg(obs="counts", weights="frequency", family="poisson",  data=thai_cohort, numiter=18000, acc=0.00001, startk=25)
+mix <- mixalg(obs="counts", weights="frequency", family="poisson", data=thai_cohort,
+              numiter=18000, acc=0.00001, startk=25)
 }
 \references{
 Schelp, F., P. Vivatanasept, P. Sitaputra, S. Sornmani, P. Pongpaew, N. Vudhivai, S. Egormaiphol, and D. B{\"o}hning.  \dQuote{Relationship of the morbidity of under-fives to anthropometric measurements and community health intervention.} \emph{Trop Med Parasitol}, 1990, 41(2), 121--126.

@@ -15,7 +15,8 @@ We systematically searched for cohort-studies and case-control-studies from 2001
 
 data(aspirin)
 wgt <- 1/aspirin$var# calculate weights
-m0 <- mixcov(dep="logrr",fixed=c("type","yearc"),random="",weight=wgt,k=1,family="gaussian",data=aspirin)
+m0 <- mixcov(dep="logrr", fixed=c("type","yearc"), random="", weight=wgt,
+             k=1,family="gaussian",data=aspirin)
 
 }
 \references{

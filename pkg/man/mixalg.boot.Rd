@@ -21,7 +21,8 @@ The mode of this distribution is taken as an estimate of the number of component
 
 
 \usage{
-mixalg.boot(mix, nboot=500, limit=0.01, acc=10^(-5), numiter=5000, startk=50, returnBootstrapRep=FALSE)    
+mixalg.boot(mix, nboot=500, limit=0.01, acc=10^(-5), numiter=5000, 
+            startk=50, returnBootstrapRep=FALSE)    
 }
 
 
@@ -72,13 +73,13 @@ Peter Schlattmann and Johannes Hoehne
 ### POISSON data with weights: thai_cohort
 data(thai_cohort)
 m.thai<- mixalg(obs="counts",weights="frequency",family="poisson",data=thai_cohort)
-#boot <- mixalg.boot(m.thai, nboot=1000) #may take a few minutes
+\dontrun{boot <- mixalg.boot(m.thai, nboot=1000)} #may take a few minutes
 
 ### POISSON data with observed and expected data: hepab
 data(hepab)
 mix <- mixalg(obs="observations",pop.at.risk="expected",family= "poisson",data=hepab)
-boot <- mixalg.boot(mix, nboot=250) #may take some time 
-table(boot$numk.boot)
+\dontrun{boot <- mixalg.boot(mix, nboot=250) #may take some time 
+table(boot$numk.boot)}
 }
 
 \keyword{meta-analysis}

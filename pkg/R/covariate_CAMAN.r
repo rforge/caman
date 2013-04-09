@@ -349,6 +349,7 @@ mix.perform_glm <- function(form,data,k,p=NULL,y,b=NULL,
 # 			oldlog<-log1 
 # 			}
 # 		else continue_iterate = FALSE  #there was no shuffeling, so just make one iteration and 
+    continue_iterate = FALSE ## PD: need to drop this line if shuffling is reimplemented!
 	}
 	#cat("residualvarianz: ", residVar)
 suppressWarnings(return(list(m1 = m1,p=p,pPosteriori = pPosteriori,xf = xf,x=x,logl = logl,
