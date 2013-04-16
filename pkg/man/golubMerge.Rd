@@ -16,6 +16,7 @@ A matrix with 7129 rows (for the genes) and 72 columns (for the patients).
 \note{The data also appear in the bioconductor package \code{golubEsets} in a different format. See Schlattmann (2009) for details on how to handle this type of data.}
 
 \examples{
+\dontrun{
 ## microarray analysis example
 data(golubMerge)
 idxALL <- which(sample.labels== "ALL")
@@ -29,6 +30,7 @@ hist(mix)
 
 ### get False discovery rate (Not-differential expressed genes are in component 1)
 getFDR(mix, threshold=.4)
+}
 }
 
 
