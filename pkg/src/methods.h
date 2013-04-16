@@ -9,6 +9,7 @@
 #include <R.h>
 #include <Rinternals.h>
 #include <R_ext/Rdynload.h>
+#include <vector>
 
 
 
@@ -59,11 +60,12 @@ double likelihood ();
 double loglike1(double al,double *dd);
 void EM(int nstep);
 void EMCG();
-void gradcg(double *gradq,double *p1,double *t);
-double stepcg(double *gradq,double *d);
-double stepjj(double *gradq,double *d);
-void getchange(double *cx);
-void initchange (double *cx);
+void gradcg(std::vector<double> gradq,double *p1, double *t);
+void gradcg(std::vector<double> gradq,std::vector<double> p1, std::vector<double>t1);
+double stepcg(std::vector<double>  gradq,double *d);
+double stepjj(std::vector<double> gradq,std::vector<double> d);
+void getchange(std::vector<double> cx);
+void initchange (std::vector<double> cx);
 int Combine();
 short klasse();
 void Classify();

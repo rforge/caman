@@ -122,7 +122,7 @@ void mixalg_sub(double * DATa, double * DATb, double * DATc, double * DATd, int 
              mix->p = P;
              mix->t = T;            
              mix->EM(mix->numstep); // refiend soultion with EM algorithm
-	         NUMSTEP[0] = mix->em_details[1];
+           NUMSTEP[0] = mix->em_details[1];
              ACC[0] = mix->em_details[0];
              if (mix->dens==0) COMP_VAR[0] = mix->compvar;
              for (i=0;i< NUMK[0];i++){
@@ -390,7 +390,8 @@ return(log(s11));
 int MixMod::Update()
 {
  int i,j;
- double tempt[k],tempp[k];
+ std::vector<double> tempt(k);
+ std::vector<double> tempp(k);
 
 
  for (i=0;i<k;i++)
@@ -595,8 +596,11 @@ return lrs;
 
  int MixMod::Combine()
 {
- int i,j,jj,count[k],tempk,tmpnumstep=1;
- double tempp[k],tempt[k],diff;
+ int i,j,jj,tempk,tmpnumstep=1;
+ std::vector<int>count(k);
+ std::vector<double>tempp(k);
+ std::vector<double>tempt(k);
+ double diff;
 
 	for (i=0;i<k;i++)
 	{
@@ -808,7 +812,11 @@ int cmpgle( double *arg1, double *arg2 )
 void MixMod::EMCG()
 {
 int i,icount,numem=5,nump,ii;
-double s,s11,ymax,b,change[k],gradq[k],grad1q[k],d[k],alpha,beta=0.;
+double s,s11,ymax,b,alpha,beta=0.;
+std::vector<double>change(k);
+std::vector<double>gradq(k);
+std::vector<double>grad1q(k);
+std::vector<double>d(k);
 int l;
 
 
@@ -839,6 +847,8 @@ d[i]=change[i];
 
 
 // 1. Compute the gradient of  LogL() 
+
+
 
 gradcg(gradq,p,t);
 alpha=stepjj(gradq,d);
@@ -908,7 +918,7 @@ if(fabs(s) > 1.E-1) for(i=0;i<nump;i++)d[i]=change[i];
 
 
 
-void MixMod::initchange (double *cx)
+void MixMod::initchange (std::vector<double> cx)
 {
 int l,i,ii;
  l=k-1;
@@ -922,7 +932,7 @@ int l,i,ii;
 
 }
 
-void MixMod::getchange(double *cx)
+void MixMod::getchange(std::vector<double> cx)
 {
 int l,i,ii;
 l=k-1;
@@ -940,7 +950,7 @@ l=k-1;
 
  
 
-double MixMod::stepcg(double *gradcg,double *d)
+double MixMod::stepcg(std::vector<double> gradcg,double *d)
 {
 double alpha,a,galphab,c,gstrich,test,alphab;
 int i,nump;
@@ -969,7 +979,9 @@ return alpha;
 
 double MixMod::loglike1(double alphab,double *d)
 {
-double td[k],pd[k],value,s,ad,sp;
+double value,s,ad,sp;
+std::vector<double> td(k);
+std::vector<double> pd(k);
 int i,j,l,ii;
 double * s1t;
 //if (longmode) s1t = new double [nnlong];
@@ -1019,10 +1031,10 @@ value=0.;
 
 }
  
-
-void MixMod::gradcg(double *gradq,double *p1,double *t1)
+void MixMod::gradcg(std::vector<double> gradq,double *p1,double *t1)
 {
-int i,j,nump,ii;
+//int nump;
+int i,j,ii;
 double s,b;
 double **pij, **xft;
 double *s1t;
@@ -1055,7 +1067,7 @@ l=k-1;
 
 
 // Number of parameters in the model
-nump=2*k-1;
+//nump=2*k-1;
 
 // temporary matrix of function values
   for(i=0;i<n;i++)
@@ -1123,6 +1135,113 @@ nump=2*k-1;
      }
 }
 
+// The function gradcg is overloaded to avoid trouble with
+// variable length arrays that the strict CRAN policy does not
+// allow
+void MixMod::gradcg(std::vector<double> gradq,std::vector<double> p1,
+                    std::vector<double>t1)
+{
+//int nump;
+int i,j,ii;
+double s,b;
+double **pij, **xft;
+double *s1t;
+/*if (longmode) {
+   pij = new double *[kk];
+   xft = new double *[kk];
+   for (i=0;i<kk;i++) {xft[i]=new double[nnlong];
+                      pij[i] = new double [nnlong];}
+   s1t = new double[nnlong];}
+else {   
+   pij = new double *[kk];
+   xft = new double *[kk];
+   for (i=0;i<kk;i++) {xft[i]=new double[nn];
+                      pij[i] = new double [nn];}
+   s1t = new double[nn];}
+   */
+//new
+   pij = (double **) R_alloc(k, sizeof(double *));
+   xft =(double **) R_alloc(k, sizeof(double *));
+   for (i=0;i<k;i++) {xft[i]=(double *) R_alloc(n, sizeof(double));
+                      pij[i] = (double *) R_alloc(n, sizeof(double));}
+   s1t = (double *) R_alloc(n, sizeof(double));
+
+
+int l;
+
+
+// Number of mixing weights
+l=k-1;
+
+
+// Number of parameters in the model
+//nump=2*k-1;
+
+// temporary matrix of function values
+  for(i=0;i<n;i++)
+   {
+    s=0.;
+       for(j=0;j<k;j++)
+      {
+       xft[i][j]=poisson(x[i][0],t1[j]);
+       s=s+p1[j]*xft[i][j];
+      }
+     s1t[i]=s;
+  }
+
+  /* Computation of Q�(theta,theta�) 
+	   which gives the score of the complete 
+	   data likelihood */
+
+
+// E-Step  Posteriori expectation of component membership
+  
+   for(i=0;i<n;i++)
+   {
+       for(j=0;j<k;j++)
+      {
+       xft[i][j]=poisson(x[i][0],t1[j]);
+       pij[i][j]=0.;
+       if(s1[i] > 1.E-12)
+       pij[i][j]=p1[j]*xft[i][j]/s1t[i];
+      } 
+   }
+ 
+
+   // Gradient of LogL()
+
+// First part: The k-1 mixing weights using the constraint that sum p_j =1
+
+       l=k-1;
+       for(j=0;j<l;j++)
+       {
+        s=0.;
+        for(i=0;i<n;i++)
+	{
+                         
+         b=xft[i][j]-xft[i][l]; // Contribution of the last component to the gradient
+         if(s1t[i] > 1.E-12) s=s+x[i][1]*b/s1t[i];
+	}  
+	gradq[j]=s;
+       }
+      
+       // Second part: Population parameters 
+       ii=l;
+        for(j=0;j<k;j++)
+       {
+        s=0.;
+        for(i=0;i<n;i++)
+       {
+       b=0.;
+       if(fabs(t1[j]) > 1.E-10)  b=(x[i][0]-t1[j])/t1[j];
+       s=s+x[i][1]*pij[i][j]*b;
+   
+       }
+     
+        gradq[ii]=s;
+        ii++;
+     }
+}
 
 
 
@@ -1130,11 +1249,12 @@ nump=2*k-1;
 
 
 
-
-double MixMod::stepjj(double *gradq, double *d)
+double MixMod::stepjj(std::vector<double> gradq, std::vector<double> d)
  {
  double alpha0=0.,alpha1=2.,FNull,s,Falpha,astar=0.;
- double pd[k],td[k],sp,Fstart,diff;
+ std::vector<double>pd(k);
+ std::vector<double>td(k);
+ double sp,Fstart,diff;
  int i,j,nump,inum,l,ii;
  l=k-1;
  nump=2*k-1;
@@ -1146,7 +1266,6 @@ double MixMod::stepjj(double *gradq, double *d)
  }
  FNull=s;
  Fstart=FNull*0.1;
-
 
  for(inum=0;inum<2;inum++)
  {
@@ -1165,11 +1284,9 @@ double MixMod::stepjj(double *gradq, double *d)
   }
    sp=0.;
    for(j=0;j<k;j++)
-   { 
-     
+   {      
      sp=sp+pd[j];
    }
-
  gradcg(gradq,pd,td);
  s=0.;
  for(i=0;i<nump;i++)
