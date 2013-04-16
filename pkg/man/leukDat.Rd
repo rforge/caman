@@ -10,7 +10,15 @@ East Germany (Moehner et al. 1994). The data provided  the regional distribution
 }
 \usage{data("leukDat")}
 
-\details{See the example section of the documentation of \code{\link{mixalg}}.}
+\examples{
+## disease mapping example
+data(leukDat)
+data(GDRmap) # this is the map of the former GDR
+mix.leuk <- mixalg(obs = "oleuk", pop.at.risk = "eleuk",
+                   data = leukDat, family = "poisson")
+mix.leuk
+plot(GDRmap, col = mix.leuk@classification)          
+}
 
 \references{
 Schlattmann, P.(2009) \emph{Medical Applications of Finite Mixture Models.} Berlin: Springer.

@@ -272,7 +272,9 @@ mix.perform_glm <- function(form,data,k,p=NULL,y,b=NULL,
 		#wt --> studienspezifische Gewichte, die mit den daten ?bergeben werden (weight) 
 		dataExpanded$wgt <- pPosteriori/wt
 		dataExpanded$expect <- log(expected)
-		
+		wgt <- pPosteriori/wt ## avoids CRAN policy problems with "no visible binding for global variable"
+		expect <- log(expected) ## dito
+    
 		# model
 		if(family=="poisson") b[1:k]=log(b[1:k])
 		

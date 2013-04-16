@@ -100,6 +100,11 @@ mixalg(obs, weights=NULL, family="gaussian", data=NULL, pop.at.risk=NULL,
     \item{finalacc}{deltaLL of the final iteration (for VEM and EM)}
 
 }
+
+\details{
+The documentation of \code{\link{leukDat}} contains a disease mapping example using \code{mixalg} and the documentation of \code{\link{golubMerge}} contains a microarray analysis example.
+}
+
 \seealso{
   \code{\link{mixalg.EM}}, \code{\link{mixalg.VEM}}, \code{\link{anova.CAMAN.object}}, \code{\link{mixcov}}, \code{\link{mixalg.boot}} 
 }
@@ -130,27 +135,12 @@ data(aspirin)
 mix <- mixalg(obs="logrr", var.lnOR="var", data=aspirin)
 
 
-### microarray analysis
-data(golubMerge)
-idxALL <- which(sample.labels== "ALL")
-idxAML <- which(sample.labels == "AML")
-pvals <- apply(golubMerge.exprs, 1, function(x){t.test(x[idxAML],x[idxALL])[[3]]})
-zvals <- qnorm(1-pvals)
-hist(zvals,100)
-### Z-values are gaussian distributed, mix identifies a mixture of gaussians. 
-mix <- mixalg(obs=zvals, family="gaussian", startk=25)
-hist(mix)
+## See the documentation of golub.Merge for a
+## microarray analysis example using mixalg
 
-### get False discovery rate (Not-differential expressed genes are in component 1)
-getFDR(mix, threshold=.4)
+## See the documentation of leukDat for a disease
+## mapping example using mixalg
 
-#### disease mapping
-data(leukDat)
-data(GDRmap) # this is the map of the former GDR
-mix.leuk <- mixalg(obs = "oleuk", pop.at.risk = "eleuk",
-                   data = leukDat, family = "poisson")
-mix.leuk
-plot(GDRmap, col = mix.leuk@classification)                      
 }
 
 \keyword{meta-analysis, mixture model, mix}

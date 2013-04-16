@@ -15,6 +15,23 @@ A matrix with 7129 rows (for the genes) and 72 columns (for the patients).
 
 \note{The data also appear in the bioconductor package \code{golubEsets} in a different format. See Schlattmann (2009) for details on how to handle this type of data.}
 
+\examples{
+## microarray analysis example
+data(golubMerge)
+idxALL <- which(sample.labels== "ALL")
+idxAML <- which(sample.labels == "AML")
+pvals <- apply(golubMerge.exprs, 1, function(x){t.test(x[idxAML],x[idxALL])[[3]]})
+zvals <- qnorm(1-pvals)
+hist(zvals,100)
+### Z-values are gaussian distributed, mix identifies a mixture of gaussians. 
+mix <- mixalg(obs=zvals, family="gaussian", startk=25)
+hist(mix)
+
+### get False discovery rate (Not-differential expressed genes are in component 1)
+getFDR(mix, threshold=.4)
+}
+
+
 \source{
 \url{http://www-genome.wi.mit.edu/mpr/data_set_ALL_AML.html}
 }
