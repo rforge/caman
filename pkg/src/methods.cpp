@@ -783,7 +783,7 @@ double poisson (double x,double lambda)
    s=0.;
    if(k > 0)
    {
-    for(i=1;i<=k; i++) s=s+log(i);
+    for(i=1;i<=k; i++) s=s+log(double(i));
     
    }
    pois=-lambda+x*log(lambda);
@@ -894,7 +894,7 @@ if(fabs(s11) > 1.E-10) beta=s/s11;
   
 //Compute the direction d
 
-if(fmod(icount,nump)==0)
+if(icount%nump ==0)
 {
  for(i=0;i<nump;i++)d[i]=change[i];
    }
@@ -909,10 +909,8 @@ for(i=0;i<nump;i++)
   }
 if(fabs(s) > 1.E-1) for(i=0;i<nump;i++)d[i]=change[i];
     ll=likelihood();
-
            maxderiv (ymax);
-	    if ( fabs((ymax-1.0) <acc) && (icount > 2 )) break;
-
+	    if ( (fabs(double(ymax-1.0)) <acc) && (icount > 2 )) break;
   } 
  } 
 

@@ -1,7 +1,7 @@
 Package: CAMAN
 Type: Package
-Version: 0.66
-Date: 2013-04-17
+Version: 0.67
+Date: 2013-04-19
 Title: Finite Mixture Models and meta-analysis tools - based on C.A.MAN
 Author: Peter Schlattmann <peter.schlattmann@mti.uni-jena.de>, Johannes Hoehne 
 Maintainer: Philipp Doebler <philipp.doebler@googlemail.com>
