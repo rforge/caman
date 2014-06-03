@@ -18,11 +18,10 @@ the value of \eqn{-2 \log \xi} obtained from the original sample.
 
 \usage{
 \method{anova}{CAMAN.object}(object, object1, nboot=2500, limit=0.01, acc=10^(-7), 
-                 numiter=5000, giveBootstrapData=FALSE, giveLikelihood=FALSE, ...)
+     numiter=5000, giveBootstrapData=FALSE, giveLikelihood=FALSE, ...)
 }
 
 \arguments{
-the parameters \code{limit, acc} and \code{numiter} are used for the VEM algorithm in each bootstrap sample.
 \item{object}{
 A CAMAN-object which quantifies a finite mixture model under null hypothesis.
 }
@@ -52,13 +51,16 @@ Number of bootstrap samples.
   }
 }
 
-
+\details{The parameters \code{limit, acc} and \code{numiter} are used for the VEM algorithm in each bootstrap sample.
+}
 
 \value{
-    The function returns a list
-    \code{$overview}: comparison of the models, including BIC, LL and LL-ratio \cr
-    \code{$`LL ratios in bootstrap-data`}: 90, 95, 97.5 and 99 percentiles of LL-ratios \cr
-    \code{$`simulated p-value`}: p-value, quantifying the null model  \cr
+    The function returns a list with components
+    \itemize{
+    \item \code{overview}: comparison of the models, including BIC, LL and LL-ratio \cr
+    \item \code{`LL ratios in bootstrap-data`}: 90, 95, 97.5 and 99 percentiles of LL-ratios \cr
+    \item \code{`simulated p-value`}: p-value, quantifying the null model  \cr
+}
 }
 
 \references{

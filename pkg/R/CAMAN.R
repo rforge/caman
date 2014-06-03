@@ -1,15 +1,3 @@
-# TODO
-# 
-# Author: Johannes
-###############################################################################
-
-# TODO aspirin_metaanalyse
-# TODO aspirin_metaanalyse
-
-
-
-
-# C:\charite\codeForSpringer\actual caman files\CAMAN\R\CAMAN.r
 mixalg = function(obs, weights=NULL, family="gaussian", data=NULL, 
                   pop.at.risk=NULL, var.lnOR=NULL, limit=0.01, 
                   acc=10^(-7), numiter=5000, startk=50){        
@@ -77,11 +65,11 @@ mixalg = function(obs, weights=NULL, family="gaussian", data=NULL,
     
     
     if (res@steps[1] >= res@otherParams[2]) {
-      warning("Warning: Solution does not satisfy convergence criterion:\n The last VEM-iteration had a accurency of ",
+      warning("Warning: Solution does not satisfy convergence criterion:\n The last VEM-iteration had a accuracy of ",
               res@finalacc[1],". You asked for (acc=)", acc,
               "\n Please increase numiter or decrease acc", sep="")}
 if (res@steps[2] >= res@otherParams[2]) {
-  warning("Warning: Solution does not satisfy convergence criterion:\n The last EM-iteration had a accurency of ",
+  warning("Warning: Solution does not satisfy convergence criterion:\n The last EM-iteration had a accuracy of ",
           res@finalacc[2],". You asked for (acc=)", acc,
           "\n Please increase numiter or decrease acc", sep="")}
     return(res)
@@ -581,7 +569,426 @@ summary.CAMAN.object <- function(object, ...){
 
 
 #some abbrevated commands
+#mixboot <- mixalg.boot
+#mixalg.Boot <- mixalg.boot
+#mixpboot <- mixalg.paraBoot
+#mix.anova <- anova.CAMAN.object
+##########################################################################
+#
+#
+# New bivariate functions
+##########################################################################
+#
+bivariate.EM<-function(obs1,obs2,type,data, var1, var2, corr, lambda1, lambda2,p,numiter=5000,acc=1.e-7,class){
+if(type=="bi"&& lambda1!=0 && lambda2 !=0 && p !=0){
+##cat("### EM-algorithm for bivariate normally distributed data")
+attach(data)
+on.exit(detach(data))
+
+z1 <- function(a,n,l1,l2,pro, numiter,acc){.Call("ema_versh_st", as.vector(a), as.vector(n),as.vector(l1),as.vector(l2),as.vector(pro), as.integer(numiter), as.double(acc), PACKAGE = "CAMAN")}
+er <- z1(obs1,obs2,lambda1,lambda2,p,numiter,acc)
+len<-length(er)
+l<-len/7
+lam1<-er[1:l]
+lam2<-er[(l+1):(2*l)]
+prob<-er[((2*l)+1):(3*l)]
+var1<-er[((3*l)+1):(4*l)]
+var2<-er[((4*l)+1):(5*l)]
+corr<-er[((5*l)+1):(6*l)]
+ll<-er[((6*l)+1)]
+bic <- -2 * ll[1] + (3*length(prob)- 1) * log(length(obs1))
+
+ERG<-matrix(data=c(lam1,lam2,prob,var1,var2,corr),nrow=l,ncol=6)
+colnames(ERG) <- c("Lambda1","Lambda_2","Prob","Var1","Var2","Corr")
+z2<-function(a,n,l1,l2,pro, numiter,acc){.Call("ema_ind_st", as.vector(a), as.vector(n),as.vector(l1),as.vector(l2),as.vector(pro), as.integer(numiter), as.double(acc), PACKAGE = "CAMAN")}
+er2<-z2(obs1,obs2,lambda1,lambda2,p, numiter,acc)
+
+x<-rep(1,629)
+y<-rep(1,629)
+a<-sqrt(qchisq(0.95,2))
+t<-seq(0,6.28,0.01)
+x<-array(rep(0,629*1*l),c(629,1,l))
+y<-array(rep(0,629*1*l),c(629,1,l))
+z<-array(rep(0,629*2*l),c(629,2,l))
+for (i in 1:l){
+x[, , i]<-lam1[i]+sqrt(var1[i])*a*cos(t)
+y[,,i]<-lam2[i]+sqrt(var2[i])*a*cos(t+acos(corr[i]))
+}
+for (i in 1:l){
+z[, , i]<-c(x[,,i],y[,,i])
+}
+id<-er2
+id<-id+1
+a<-0
+nn<-length(obs1)
+mat<-matrix(data=c(obs1,obs2,id),nrow=nn,ncol=3)
+
+if (class=="TRUE"){
+res<-new("CAMAN.BIEM.object", RESULT=ERG ,BIC=bic,LL=ll[1],Mat=mat, Z=z,cl=er2)}
+if (class=="FALSE"){
+res<-new("CAMAN.BIEM.object", RESULT=ERG ,BIC=bic,LL=ll[1],Mat=mat, Z=z)}
+
+return(res)
+
+
+}
+
+if(type=="meta" &&  lambda1!=0 && lambda2!=0 && p!=0){
+attach(data)
+on.exit(detach(data))
+z3<-function(a,n,v1,v2,l1,l2,pro, numiter,acc){.Call("ema_meta_st", as.vector(a), as.vector(n),as.vector(v1),as.vector(v2),as.vector(l1),as.vector(l2),as.vector(p),as.integer(numiter),as.double(acc), PACKAGE = "CAMAN")}
+er<-z3(obs1,obs2,var1,var2,lambda1,lambda2,p,numiter,acc)
+len<-length(er)
+l<-len/5
+lam1<-er[1:l]
+lam2<-er[(l+1):(2*l)]
+prob<-er[((2*l)+1):(3*l)]
+ll<-er[(3*l+1):(4*l)]
+max_grad<-er[(4*l+1):len]
+bic <- -2 * ll[1] + (3*length(prob)- 1) * log(length(obs1))
+
+ERG1<-matrix(data=c(lam1,lam2,prob),nrow=l,ncol=3)
+colnames(ERG1) <- c("lambda1","lambda2","p")
+#colnames(mat) <- c("Lambda_1","Lambda_2","Prob","LL","max_grad")
+z4<-function(a,n,v1,v2,l1,l2,p, numiter,acc){.Call("ema_ind_meta_st", as.vector(a), as.vector(n),as.vector(v1),as.vector(v2),as.vector(l1),as.vector(l2),as.vector(p),as.integer(numiter), as.double(acc), PACKAGE = "CAMAN")}
+er<-z4(obs1,obs2,var1,var2,lambda1,lambda2,p, numiter,acc)
+
+
+
+if (class=="TRUE"){
+res<-new("CAMAN.BIEM.object", RESULT=ERG1 ,BIC=bic,LL=ll[1], cl=er)}
+if (class=="FALSE"){
+res<-new("CAMAN.BIEM.object", RESULT=ERG1 ,BIC=bic,LL=ll[1])}
+
+return(res)
+
+}
+} 
+bivariate.VEM <-function(obs1,obs2,type,data, var1, var2, lambda1, lambda2,p, startk, numiter=5000,acc=1.e-7){
+if(type=="uni"){
+attach(data)
+on.exit(detach(data))
+z5<-function(a, startk, numiter,acc){.Call("vem_uni", as.vector(a),as.integer(startk),as.integer(numiter), as.double(acc), PACKAGE = "CAMAN")}
+er<-z5(obs1, startk,numiter,acc)
+len<-length(er)
+l<-len/3
+lam<-er[1:l]
+prob<-er[(l+1):(2*l)]
+ll<-er[((2*l)+1)]
+bic <- -2 * ll[1] + (3*2- 1) * log(length(obs1))
+mat<-matrix(data=c(lam,prob),nrow=l,ncol=2)
+colnames(mat) <- c("lambda","mixing Prob")
+res<-new("CAMAN.BIVEM.object", RESULT_uni=mat ,BIC=bic,LL=ll[1])
+return(res)
+
+}
+if(type=="bi"){
+attach(data)
+on.exit(detach(data))
+
+z6<-function(a,n, startk, numiter,acc){.Call("vem_bi_sh", as.vector(a), as.vector(n),as.integer(startk), as.integer(numiter), as.double(acc), PACKAGE = "CAMAN")}
+er<-z6(obs1,obs2, startk,numiter,acc)
+len<-length(er)
+l<-len/4
+lam1<-er[1:l]
+lam2<-er[(l+1):(2*l)]
+prob<-er[((2*l)+1):(3*l)]
+ll<-er[((3*l)+1)]
+bic <- -2 * ll[1] + (3*length(prob)- 1) * log(length(obs1))
+mat<-matrix(data=c(lam1,lam2,prob),nrow=l,ncol=3)
+#colnames(mat) <- c("Lambda_1","Lambda_2","Prob")
+
+res<-new("CAMAN.BIVEM.object", RESULT=mat ,BIC=bic,LL=ll[1])
+return(res)
+#res<-list("Vem for bivariate data","Lambda_1"=lam1, #"Lambda_2"=lam2,"Prob"=prob)
+#res<-list("VEM algorithm for bivariate data",mat)
+#print(res)
+#cat("BIC : ", bic,"\n")
+#cat("Log-Likelihood: ", ll[1],"\n")
+} 
+
+
+if(type=="meta"){
+attach(data)
+on.exit(detach(data))
+z7<-function(a,n,v1,v2, startk,numiter,acc){.Call("vem_versh_meta_sh", as.vector(a), as.vector(n),as.vector(v1),as.vector(v2),as.integer(startk), as.integer(numiter), as.double(acc), PACKAGE = "CAMAN")}
+er<-z7(obs1,obs2,var1,var2, startk,numiter,acc)
+len<-length(er)
+l<-len/4
+lam1<-er[1:l]
+lam2<-er[(l+1):(2*l)]
+prob<-er[((2*l)+1):(3*l)]
+ll<-er[((3*l)+1) :(4*l)]
+bic <- -2 * ll[1] + (3*3- 1) * log(length(obs1))
+Mat<-matrix(data=c(prob,lam1,lam2),nrow=l,ncol=3)
+#colnames(mat) <- c("p","lambda1","lambda1")
+ 
+#res<-list("VEM algorithm for diagnostic meta analysis", mat)
+res<-new("CAMAN.BIVEM.object", RESULT_meta=Mat,BIC=bic,LL=ll[1])
+return(res)
+#res<-list("VEM algorithm for diagnostic meta analysis", "lambda_1"=lam1, "lambda_2"=lam2,"p"=prob)
+#print(res)
+#cat("BIC : ", bic,"\n")
+#cat("Log-Likelihood: ", ll[1],"\n")
+
+}
+}
+
+vem_grad<-function(obs1,obs2,type,data,var1, var2,lambda1, lambda2,p, startk,numiter=5000,acc=1.e-7){
+attach(data)
+on.exit(detach(data))
+
+z14<-function(a,n, startk, numiter,acc){.Call("vem_bi_grad", as.vector(a), as.vector(n),as.integer(startk), as.integer(numiter), as.double(acc), PACKAGE = "CAMAN")}
+er<-z14(obs1,obs2, startk,numiter,acc)
+len<-length(er)
+l<-len/4
+lam1<-er[1:l]
+lam2<-er[(l+1):(2*l)]
+prob<-er[((2*l)+1):(3*l)]
+grad<-er[((3*l)+1):(4*l)]
+#bic <- -2 * ll[1] + (3*5- 1) * log(length(obs1))
+mat<-matrix(data=c(lam1,lam2,prob,grad),nrow=l,ncol=4)
+colnames(mat) <- c("Lambda_1","Lambda_2","Prob","Grad")
+#res<-list("Vem for bivariate data","Lambda_1"=lam1, "Lambda_2"=lam2,"Prob"=prob, "Grad"=grad)
+res<-list("VEM algorithm for bivariate data",mat)
+print(res)
+}
+
+
+bivariate.mixalg<-function(obs1,obs2,type,data,var1, var2, corr, lambda1, lambda2,p,startk, numiter=5000,acc=1.e-7,class){
+if(type=="uni"){
+attach(data)
+on.exit(detach(data))
+
+z8<-function(a, startk, numiter,acc){.Call("ema_uni", as.double(a),as.integer(startk),as.integer(numiter), as.double(acc), PACKAGE = "CAMAN")}
+er<-z8(obs1, startk, numiter,acc)
+len<-length(er)
+l<-len/3
+lam<-er[1:l]
+prob<-er[(l+1):(2*l)]
+var<-er[(2*l+1):len]
+matu<-matrix(data=c(lam,prob,var),nrow=l,ncol=3)
+#colnames(mat) <- c("Lambda","Prob","Var")
+z9<-function(a,startk, numiter,acc){.Call("ema_ind_uni", as.double(a),as.integer(startk),as.integer(numiter), as.double(acc), PACKAGE = "CAMAN")}
+er<-z9(obs1,startk, numiter,acc)
+
+if (class=="TRUE"){
+res<-new("CAMAN.BIMIXALG.object", RESULT_uni=matu ,BIC=bic,LL=ll[1],cl=er)}
+if (class=="FALSE"){
+res<-new("CAMAN.BIMIXALG.object", RESULT_uni=matu ,BIC=bic,LL=ll[1])}
+
+return(res)
+
+
+}
+
+if(type=="bi"&& lambda1==0 && lambda2 ==0 && p==0){
+attach(data)
+on.exit(detach(data))
+
+z10<-function(a,n,startk, numiter,acc){.Call("ema_versh_sh", as.double(a), as.double(n),as.integer(startk),as.integer(numiter), as.double(acc), PACKAGE = "CAMAN")}
+er<-z10(obs1,obs2,startk, numiter,acc)
+len<-length(er)
+l<-len/7
+lambda1<-er[1:l]
+lambda2<-er[(l+1):(2*l)]
+prob<-er[((2*l)+1):(3*l)]
+var1<-er[((3*l)+1):(4*l)]
+var2<-er[((4*l)+1):(5*l)]
+corr<-er[((5*l)+1):(6*l)]
+ll<-er[((6*l)+1)]
+bic <- -2 * ll[1] + (3*length(prob)- 1) * log(length(obs1))
+ERG<-matrix(data=c(lambda1,lambda2,prob,var1,var2,corr),nrow=l,ncol=6)
+#colnames(ERG) <- c("Lambda1","Lambda_2","Prob","Var1","Var2","Corr")
+z11<-function(a,n,startk, numiter,acc){.Call("ema_ind_sh", as.double(a), as.double(n),as.integer(startk),as.integer(numiter), as.double(acc), PACKAGE = "CAMAN")}
+er2<-z11(obs1,obs2,startk, numiter,acc)
+#par(mfrow=c(2,1))
+#plot(obs1,obs2, xlab = "x1", ylab = "x2",pch=19,col="blue",cex=0.4,main=" rs12363681");
+x<-rep(1,629)
+y<-rep(1,629)
+a<-sqrt(qchisq(0.95,2))
+t<-seq(0,6.28,0.01)
+x<-array(rep(0,629*1*l),c(629,1,l))
+y<-array(rep(0,629*1*l),c(629,1,l))
+z<-array(rep(0,629*2*l),c(629,2,l))
+for (i in 1:l){
+x[, , i]<-lambda1[i]+sqrt(var1[i])*a*cos(t)
+y[,,i]<-lambda2[i]+sqrt(var2[i])*a*cos(t+acos(corr[i]))
+}
+for (i in 1:l){
+z[, , i]<-c(x[,,i],y[,,i])
+}
+id<-er2
+id<-id+1
+a<-0
+nn<-length(obs1)
+mat<-matrix(data=c(obs1,obs2,id),nrow=nn,ncol=3)
+
+if (class=="TRUE"){
+res<-new("CAMAN.BIMIXALG.object", RESULT=ERG ,BIC=bic,LL=ll[1],Mat=mat, Z=z,cl=er2)}
+if (class=="FALSE"){
+res<-new("CAMAN.BIMIXALG.object", RESULT=ERG ,BIC=bic,LL=ll[1],Mat=mat, Z=z)}
+
+return(res)
+
+}
+if(type=="meta" &&  lambda1==0 && lambda2==0 && p==0){
+attach(data)
+on.exit(detach(data))
+
+z12<-function(a,n,v1,v2, startk, numiter,acc){.Call("ema_meta_sh", as.double(a), as.double(n),as.vector(v1),as.vector(v2),as.integer(startk),as.integer(numiter), as.double(acc), PACKAGE = "CAMAN")}
+er<-z12(obs1,obs2,var1,var2, startk, numiter,acc)
+len<-length(er)
+l<-len/5
+lambda1<-er[1:l]
+lambda2<-er[(l+1):(2*l)]
+prob<-er[((2*l)+1):(3*l)]
+ll<-er[(3*l+1):(4*l)]
+max_grad<-er[(4*l+1):len]
+bic <- -2 * ll[1] + (3*length(prob)- 1) * log(length(obs1))
+
+ERG1<-matrix(data=c(lambda1,lambda2,prob),nrow=l,ncol=3)
+#colnames(ERG1) <- c("Lambda_1","Lambda_2","Prob")
+z13<-function(a,n,v1,v2,startk, numiter,acc){.Call("ema_ind_meta_sh", as.double(a), as.double(n),as.vector(v1),as.vector(v2),as.integer(startk),as.integer(numiter), as.double(acc), PACKAGE = "CAMAN")}
+er<-z13(obs1,obs2,var1,var2,startk, numiter,acc)
+
+if (class=="TRUE"){
+res<-new("CAMAN.BIMIXALG.object", RESULT_meta=ERG1 ,BIC=bic,LL=ll[1],cl=er)}
+if (class=="FALSE"){
+res<-new("CAMAN.BIMIXALG.object", RESULT_meta=ERG1 ,BIC=bic,LL=ll[1],)}
+return(res)
+
+}
+}
+
+
+CAMANboot<-function(obs1,obs2,var1,var2,lambda11,lambda12,prob1,lambda21,lambda22,prob2,rep,data,numiter=10000,acc=1.e-7){
+attach(data)
+on.exit(detach(data))
+a<-matrix(nrow=(length(data[,1])),ncol=2)
+k_1<-matrix(nrow=rep,ncol=(length(lambda11)*3+2))
+k_2<-matrix(nrow=rep,ncol=(length(lambda21)*3+2))
+#print("###Bootstrap für Metadaten mit Startwerten")
+fun<-function(a,n,v1,v2,l1,l2,pro,numiter,acc){.Call("ema_meta_st", as.vector(a), as.vector(n),as.vector(v1),as.vector(v2),as.vector(l1),as.vector(l2),as.vector(pro),as.integer(numiter), as.double(acc), PACKAGE = "CAMAN")}
+j<-0
+repeat{
+j<-j+1
+for(i in 1:(length(data[,1]))){
+z<-runif(1)
+size<-length(prob1)
+if (size>1){
+cdf<-rep(1:(size-1))
+for(m in 1:(size-1)){
+cdf[1]<-prob1[1]
+cdf[m+1]<-(cdf[m]+prob1[m+1])}
+if (z<cdf[1]){
+a[i,]<-rmvnorm(n = 1, mean=c(lambda11[1],lambda12[1]),sigma <- matrix(c(var1[i],0,0,var2[i]), ncol=2))
+}
+for(ll in 2:(size)){
+if (z>cdf[ll-1]&&z<cdf[ll]){
+a[i,]<-rmvnorm(n =1, mean=c(lambda11[ll],lambda12[ll]),sigma <- matrix(c(var1[i],0,0,var2[i]), ncol=2))
+
+if (ll<(size-1)){
+ll=ll+1}
+else break
+rm(ll)
+}
+}
+if (z>=cdf[size-1]){
+a[i,]<-rmvnorm(n =1, mean=c(lambda11[size],lambda12[size]),sigma <- matrix(c(var1[i],0,0,var2[i]), ncol=2))
+}
+}
+if (size==1){
+a[i,]<-rmvnorm(n = 1, mean=c(lambda11[1],lambda12[1]),sigma <- matrix(c(var1[i],0,0,var2[i]), ncol=2))
+}
+}
+er1<-fun(a[,1],a[,2],var1,var2,lambda11,lambda12,prob1,numiter,acc)
+er2<-fun(a[,1],a[,2],var1,var2,lambda21,lambda22,prob2,numiter,acc)
+len1<-length(er1)
+l1<-len1/5
+lambda1_1<-er1[1:l1]
+lambda1_2<-er1[(l1+1):(2*l1)]
+prob_1<-er1[((2*l1)+1):(3*l1)]
+ll_1<-er1[(3*l1+1)]
+max_grad_1<-er1[(4*l1+1)]
+len2<-length(er2)
+l2<-len2/5
+lambda2_1<-er2[1:l2]
+lambda2_2<-er2[(l2+1):(2*l2)]
+prob_2<-er2[((2*l2)+1):(3*l2)]
+ll_2<-er2[(3*l2+1)]
+max_grad_2<-er2[(4*l2+1)]
+#k_1<-matrix(nrow=3,ncol=((l*4)-1))
+k_1[j,]<-matrix(data=c(lambda1_1,lambda1_2,prob_1,ll_1,max_grad_1),nrow=1,ncol=((length(lambda1_2)*3)+2))
+k_2[j,]<-matrix(data=c(lambda2_1,lambda2_2,prob_2,ll_2,max_grad_2),nrow=1,ncol=((length(lambda2_2)*3)+2))
+k_1<-round(x=k_1,digits=3)
+k_2<-round(x=k_2,digits=3)
+m1<-length(lambda1_2)*3+1
+m2<-length(lambda2_2)*3+1
+ii<-1:length(lambda1_1)
+aa<-paste("lam1",ii,sep="")
+bb<-paste("lam2",ii,sep="")
+cc<-paste("prob",ii,sep="")
+colnames(k_1)<-c(aa,bb,cc,"LL_1","max_grad")
+i<-1:length(lambda2_1)
+aaa<-paste("lam1",i,sep="")
+bbb<-paste("lam2",i,sep="")
+ccc<-paste("prob",i,sep="")
+colnames(k_2)<-c(aaa,bbb,ccc,"LL_2","max_grad")
+#colnames(k_1)<-c("lambda_1","lambda_2","prob","ll")
+if(j==rep) break
+}
+
+var1<-var(k_1[,1])
+var2<-var(k_1[,2])
+corr11<-cor(k_1[,1],k_1[,2])
+covv<-(sqrt(var1)*sqrt(var2))*corr11
+
+S1 <- array(rep(0, 2 * 2 * l1), c(2, 2, l1))
+for (i in 1:l1){
+S1[, , i]<-rbind(var1[i],covv[i],covv[i],var2[i])
+}
+
+
+#print( var1)
+var11<-var(k_2[,1])
+
+var12<-var(k_2[,2])
+
+corr1<-cor(k_2[,1],k_2[,2])
+var21<-var(k_2[,3])
+var22<-var(k_2[,4])
+corr2<-cor(k_2[,3],k_2[,4])
+corr<-c(corr1,corr2)
+v2_p1<-var(k_2[,5])
+v2_p2<-var(k_2[,6])
+var1<-c(var11,var21)
+var2<-c(var12,var22)
+covv<-(sqrt(var1)*sqrt(var2))*corr
+
+
+
+
+S2 <- array(rep(0, 2 * 2 * l2), c(2, 2, l2))
+for (i in 1:l2){
+S2[, , i]<-rbind(var1[i],covv[i],covv[i],var2[i])
+}
+
+
+
+for(i in rep){
+differenz<-(k_1[,m1]-k_2[,m2])}
+llh<-(-2)*differenz
+s_ll<-sort(llh)
+
+res<-new("CAMAN.BOOT.object", H0=k_1, S1=S1, H1=k_2,S2=S2, LL=s_ll, Q95=quantile(s_ll,0.95), Q975=quantile(s_ll,0.975), Q99=quantile(s_ll,0.99))
+return(res)
+} 
+
+#some abbrevated commands
 mixboot <- mixalg.boot
 mixalg.Boot <- mixalg.boot
 mixpboot <- mixalg.paraBoot
 mix.anova <- anova.CAMAN.object
+
+

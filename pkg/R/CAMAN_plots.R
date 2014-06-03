@@ -45,3 +45,30 @@ hist.CAMAN.object <- function(x, nbreaks=NULL, mixdens=TRUE, mixdens.col="red",
 }
 
 
+plot.CAMAN.BIEM.object <- function(x, ellipse = TRUE, ...){
+object<-x
+if (!ellipse){
+plot(object@Mat[,1] ,object@Mat[,2] , xlab = "x1", ylab = "x2",pch=19,col="blue",cex=0.4,main="scatter plot");}
+if (ellipse){
+colors <- c("red","green", "blue","brown","yellow","black")
+plot(object@Mat, xlab = "x1", ylab = "x2", type = "n",main="scatter plot with ellipse")
+for (a in 1:length(object@RESULT[,1])){
+points(object@Mat[object@Mat[,3] == a, ], col = colors[a], pch = 19, cex = 0.4)
+points(object@Z[,,a],col = colors[a],cex=0.4, pch=19)}
+}
+return(invisible(NULL))
+}
+
+plot.CAMAN.BIMIXALG.object <- function(x, ellipse = TRUE, ...){
+object<-x
+if (!ellipse){
+  plot(object@Mat[,1] ,object@Mat[,2] , xlab = "x1", ylab = "x2",pch=19,col="blue",cex=0.4,main="scatter plot");
+  }
+if (ellipse){
+  colors <- c("red","green", "blue","brown","yellow","black")
+  plot(object@Mat, xlab = "x1", ylab = "x2", type = "n",main="scatter plot with ellipse")
+  for (a in 1:length(object@RESULT[,1])){
+    points(object@Mat[object@Mat[,3] == a, ], col = colors[a], pch = 19, cex = 0.4)
+    points(object@Z[,,a],col = colors[a],cex=0.4, pch=19)}
+  }
+}
