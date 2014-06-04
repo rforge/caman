@@ -4,7 +4,7 @@
 \description{
 Function}
 \usage{
-bivariate.mixalg(obs1, obs2, type, data, 
+bivariate.mixalg(obs1, obs2, type, data = NULL, 
                  var1, var2, corr, lambda1, lambda2,
                  p,startk, numiter=5000, acc=1.e-7, class)}
 \arguments{

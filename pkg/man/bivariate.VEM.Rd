@@ -3,18 +3,18 @@
 \title{VEM algorithm for univariate data, for bivariate data and for meta data}
 \description{VEM algorithm for univariate data, for bivariate data and for meta data}
 \usage{
-bivariate.VEM(obs1, obs2, type, data, var1, var2, 
+bivariate.VEM(obs1, obs2, type, data = NULL, var1, var2, 
              lambda1, lambda2, p, startk, numiter=5000,
              acc=1.e-7)}
 \arguments{
   \item{obs1}{the first column of the observations}\cr
   \item{obs2}{the second column of the observations}\cr 
   \item{type}{kind of data}\cr 
-  \item{data}{an optional data frame}\cr 
+  \item{data}{an optional data frame. If not \code{NULL}, \code{obs1}, \code{obs2}, \code{var1} and \code{var2} will be looked for in \code{data}}\cr 
 \item{lambda1}{Means of the first column of the observations}\cr 
   \item{lambda2}{Means of the second column of the observations}\cr 
   \item{p}{Mixing weight}\cr 
-  \item{var1}{Variance of the first column of the observations(only for  meta-analysis)} \cr 
+  \item{var1}{Variance of the first column of the observations(only for meta-analysis)} \cr 
   \item{var2}{Variance of the second column of the observations (only for meta-analysis)} \cr 
 \item{startk}{ starting/maximal number of components. This number will be used to compute the grid in the VEM. Default is 20.)} \cr 
 \item{numiter}{parameter to control the maximal number of iterations in the VEM and EM loops. Default is 5000.} \cr

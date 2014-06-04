@@ -579,11 +579,35 @@ summary.CAMAN.object <- function(object, ...){
 # New bivariate functions
 ##########################################################################
 #
-bivariate.EM<-function(obs1,obs2,type,data, var1, var2, corr, lambda1, lambda2,p,numiter=5000,acc=1.e-7,class){
+bivariate.EM<-function(obs1,obs2,type,data = NULL, var1, var2, corr, lambda1, lambda2,p,numiter=5000,acc=1.e-7,class){
+
+  ## avoid attach/detach but keep data argument optional
+  if(!is.null(data)){
+    cl <- match.call()
+    varname <- function(x){sub("\\(\\)", "", deparse(x))}
+    obs1_name <- varname(cl[2])
+    obs2_name <- varname(cl[3])
+    stopifnot(c(obs1_name, obs2_name) %in% names(data))
+    obs1 <- getElement(data, obs1_name)
+    obs2 <- getElement(data, obs2_name)
+
+    var1_name <- varname(cl["var1"])
+    var2_name <- varname(cl["var2"])
+    if(!var1_name == "NULL" | !var2_name == "NULL"){
+      stopifnot(c(var1_name, var2_name) %in% names(data)) 
+      var1 <- getElement(data, var1_name)
+      var2 <- getElement(data, var2_name)
+    }
+
+    corr_name <- varname(cl["corr"])
+    if(!corr_name == "NULL"){
+      stopifnot(corr_name %in% names(data)) 
+      corr <- getElement(data, corr_name)
+    }
+  }
 if(type=="bi"&& lambda1!=0 && lambda2 !=0 && p !=0){
 ##cat("### EM-algorithm for bivariate normally distributed data")
-attach(data)
-on.exit(detach(data))
+
 
 z1 <- function(a,n,l1,l2,pro, numiter,acc){.Call("ema_versh_st", as.vector(a), as.vector(n),as.vector(l1),as.vector(l2),as.vector(pro), as.integer(numiter), as.double(acc), PACKAGE = "CAMAN")}
 er <- z1(obs1,obs2,lambda1,lambda2,p,numiter,acc)
@@ -613,7 +637,7 @@ z<-array(rep(0,629*2*l),c(629,2,l))
 for (i in 1:l){
 x[, , i]<-lam1[i]+sqrt(var1[i])*a*cos(t)
 y[,,i]<-lam2[i]+sqrt(var2[i])*a*cos(t+acos(corr[i]))
-}
+} 
 for (i in 1:l){
 z[, , i]<-c(x[,,i],y[,,i])
 }
@@ -629,14 +653,14 @@ if (class=="FALSE"){
 res<-new("CAMAN.BIEM.object", RESULT=ERG ,BIC=bic,LL=ll[1],Mat=mat, Z=z)}
 
 return(res)
-
-
 }
 
 if(type=="meta" &&  lambda1!=0 && lambda2!=0 && p!=0){
-attach(data)
-on.exit(detach(data))
-z3<-function(a,n,v1,v2,l1,l2,pro, numiter,acc){.Call("ema_meta_st", as.vector(a), as.vector(n),as.vector(v1),as.vector(v2),as.vector(l1),as.vector(l2),as.vector(p),as.integer(numiter),as.double(acc), PACKAGE = "CAMAN")}
+
+z3 <- function(a,n,v1,v2,l1,l2,pro, numiter,acc){
+  .Call("ema_meta_st", as.vector(a), as.vector(n),as.vector(v1),as.vector(v2),
+        as.vector(l1),as.vector(l2),as.vector(p),as.integer(numiter),as.double(acc), 
+        PACKAGE = "CAMAN")}
 er<-z3(obs1,obs2,var1,var2,lambda1,lambda2,p,numiter,acc)
 len<-length(er)
 l<-len/5
@@ -664,10 +688,28 @@ return(res)
 
 }
 } 
-bivariate.VEM <-function(obs1,obs2,type,data, var1, var2, lambda1, lambda2,p, startk, numiter=5000,acc=1.e-7){
-if(type=="uni"){
-attach(data)
-on.exit(detach(data))
+bivariate.VEM <-function(obs1,obs2,type,data = NULL, var1, var2, lambda1, lambda2,p, startk, numiter=5000,acc=1.e-7){
+
+  ## avoid attach/detach but keep data argument optional
+  if(!is.null(data)){
+    cl <- match.call()
+    varname <- function(x){sub("\\(\\)", "", deparse(x))}
+    obs1_name <- varname(cl[2])
+    obs2_name <- varname(cl[3])
+    stopifnot(c(obs1_name, obs2_name) %in% names(data))
+    obs1 <- getElement(data, obs1_name)
+    obs2 <- getElement(data, obs2_name)
+    
+    var1_name <- varname(cl["var1"])
+    var2_name <- varname(cl["var2"])
+    if(!var1_name == "NULL" | !var2_name == "NULL"){
+      stopifnot(c(var1_name, var2_name) %in% names(data)) 
+      var1 <- getElement(data, var1_name)
+      var2 <- getElement(data, var2_name)
+    }
+  }
+  
+  if(type=="uni"){
 z5<-function(a, startk, numiter,acc){.Call("vem_uni", as.vector(a),as.integer(startk),as.integer(numiter), as.double(acc), PACKAGE = "CAMAN")}
 er<-z5(obs1, startk,numiter,acc)
 len<-length(er)
@@ -683,8 +725,6 @@ return(res)
 
 }
 if(type=="bi"){
-attach(data)
-on.exit(detach(data))
 
 z6<-function(a,n, startk, numiter,acc){.Call("vem_bi_sh", as.vector(a), as.vector(n),as.integer(startk), as.integer(numiter), as.double(acc), PACKAGE = "CAMAN")}
 er<-z6(obs1,obs2, startk,numiter,acc)
@@ -709,8 +749,6 @@ return(res)
 
 
 if(type=="meta"){
-attach(data)
-on.exit(detach(data))
 z7<-function(a,n,v1,v2, startk,numiter,acc){.Call("vem_versh_meta_sh", as.vector(a), as.vector(n),as.vector(v1),as.vector(v2),as.integer(startk), as.integer(numiter), as.double(acc), PACKAGE = "CAMAN")}
 er<-z7(obs1,obs2,var1,var2, startk,numiter,acc)
 len<-length(er)
@@ -734,10 +772,27 @@ return(res)
 }
 }
 
-vem_grad<-function(obs1,obs2,type,data,var1, var2,lambda1, lambda2,p, startk,numiter=5000,acc=1.e-7){
-attach(data)
-on.exit(detach(data))
+vem_grad<-function(obs1,obs2,type,data = NULL,var1, var2,lambda1, lambda2,p, startk,numiter=5000,acc=1.e-7){
 
+  ## avoid attach/detach but keep data argument optional
+  if(!is.null(data)){
+    cl <- match.call()
+    varname <- function(x){sub("\\(\\)", "", deparse(x))}
+    obs1_name <- varname(cl[2])
+    obs2_name <- varname(cl[3])
+    stopifnot(c(obs1_name, obs2_name) %in% names(data))
+    obs1 <- getElement(data, obs1_name)
+    obs2 <- getElement(data, obs2_name)
+    
+    var1_name <- varname(cl["var1"])
+    var2_name <- varname(cl["var2"])
+    if(!var1_name == "NULL" | !var2_name == "NULL"){
+      stopifnot(c(var1_name, var2_name) %in% names(data)) 
+      var1 <- getElement(data, var1_name)
+      var2 <- getElement(data, var2_name)
+    }
+  }
+  
 z14<-function(a,n, startk, numiter,acc){.Call("vem_bi_grad", as.vector(a), as.vector(n),as.integer(startk), as.integer(numiter), as.double(acc), PACKAGE = "CAMAN")}
 er<-z14(obs1,obs2, startk,numiter,acc)
 len<-length(er)
@@ -755,11 +810,33 @@ print(res)
 }
 
 
-bivariate.mixalg<-function(obs1,obs2,type,data,var1, var2, corr, lambda1, lambda2,p,startk, numiter=5000,acc=1.e-7,class){
-if(type=="uni"){
-attach(data)
-on.exit(detach(data))
+bivariate.mixalg<-function(obs1,obs2,type,data = NULL,var1, var2, corr, lambda1, lambda2,p,startk, numiter=5000,acc=1.e-7,class){
 
+  ## avoid attach/detach but keep data argument optional
+  if(!is.null(data)){
+    cl <- match.call()
+    varname <- function(x){sub("\\(\\)", "", deparse(x))}
+    obs1_name <- varname(cl[2])
+    obs2_name <- varname(cl[3])
+    stopifnot(c(obs1_name, obs2_name) %in% names(data))
+    obs1 <- getElement(data, obs1_name)
+    obs2 <- getElement(data, obs2_name)
+    
+    var1_name <- varname(cl["var1"])
+    var2_name <- varname(cl["var2"])
+    if(!var1_name == "NULL" | !var2_name == "NULL"){
+      stopifnot(c(var1_name, var2_name) %in% names(data)) 
+      var1 <- getElement(data, var1_name)
+      var2 <- getElement(data, var2_name)
+    }
+    corr_name <- varname(cl["corr"])
+    if(!corr_name == "NULL"){
+      stopifnot(corr_name %in% names(data)) 
+      corr <- getElement(data, corr_name)
+    }
+  }
+  
+  if(type=="uni"){
 z8<-function(a, startk, numiter,acc){.Call("ema_uni", as.double(a),as.integer(startk),as.integer(numiter), as.double(acc), PACKAGE = "CAMAN")}
 er<-z8(obs1, startk, numiter,acc)
 len<-length(er)
@@ -783,8 +860,6 @@ return(res)
 }
 
 if(type=="bi"&& lambda1==0 && lambda2 ==0 && p==0){
-attach(data)
-on.exit(detach(data))
 
 z10<-function(a,n,startk, numiter,acc){.Call("ema_versh_sh", as.double(a), as.double(n),as.integer(startk),as.integer(numiter), as.double(acc), PACKAGE = "CAMAN")}
 er<-z10(obs1,obs2,startk, numiter,acc)
@@ -833,8 +908,6 @@ return(res)
 
 }
 if(type=="meta" &&  lambda1==0 && lambda2==0 && p==0){
-attach(data)
-on.exit(detach(data))
 
 z12<-function(a,n,v1,v2, startk, numiter,acc){.Call("ema_meta_sh", as.double(a), as.double(n),as.vector(v1),as.vector(v2),as.integer(startk),as.integer(numiter), as.double(acc), PACKAGE = "CAMAN")}
 er<-z12(obs1,obs2,var1,var2, startk, numiter,acc)
@@ -863,9 +936,24 @@ return(res)
 
 
 CAMANboot<-function(obs1,obs2,var1,var2,lambda11,lambda12,prob1,lambda21,lambda22,prob2,rep,data,numiter=10000,acc=1.e-7){
-attach(data)
-on.exit(detach(data))
-a<-matrix(nrow=(length(data[,1])),ncol=2)
+
+    cl <- match.call()
+    varname <- function(x){sub("\\(\\)", "", deparse(x))}
+    obs1_name <- varname(cl[2])
+    obs2_name <- varname(cl[3])
+    stopifnot(c(obs1_name, obs2_name) %in% names(data))
+    obs1 <- getElement(data, obs1_name)
+    obs2 <- getElement(data, obs2_name)
+    
+    var1_name <- varname(cl["var1"])
+    var2_name <- varname(cl["var2"])
+    if(!var1_name == "NULL" | !var2_name == "NULL"){
+      stopifnot(c(var1_name, var2_name) %in% names(data)) 
+      var1 <- getElement(data, var1_name)
+      var2 <- getElement(data, var2_name)
+    }
+  
+  a<-matrix(nrow=(length(data[,1])),ncol=2)
 k_1<-matrix(nrow=rep,ncol=(length(lambda11)*3+2))
 k_2<-matrix(nrow=rep,ncol=(length(lambda21)*3+2))
 #print("###Bootstrap für Metadaten mit Startwerten")

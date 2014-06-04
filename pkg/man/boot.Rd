@@ -9,7 +9,7 @@ CAMANboot(obs1, obs2, var1, var2, lambda11, lambda12,
 \arguments{
   \item{obs1}{the first column of the observations}\cr
   \item{obs2}{the second column of the observations}\cr 
-  \item{data}{an optional data frame}\cr 
+  \item{data}{a data frame}\cr 
   \item{var1}{Variance of the first column of the observations(except meta-analysis)} \cr 
   \item{var2}{Variance of the second column of the observations (except meta-analysis)} \cr 
   \item{lambda11}{first means of the first column of the observations}\cr 

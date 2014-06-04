@@ -6,14 +6,15 @@
 \description{
 Function}
 \usage{
-bivariate.EM(obs1, obs2, type, data, var1, var2, 
+bivariate.EM(obs1, obs2, type, data = NULL,
+             var1, var2, 
              corr, lambda1, lambda2, p, 
              numiter=5000,acc=1.e-7,class)}
 \arguments{
   \item{obs1}{the first column of the observations}\cr
   \item{obs2}{the second column of the observations}\cr 
   \item{type}{kind of data}\cr 
-  \item{data}{an optional data frame}\cr 
+  \item{data}{an optional data frame. If not \code{NULL}, \code{obs1}, \code{obs2}, \code{var1}, \code{var2} and \code{corr} will be looked for in \code{data}}\cr 
   \item{var1}{Variance of the first column of the observations(except meta-analysis)} \cr 
   \item{var2}{Variance of the second column of the observations (except meta-analysis)} \cr 
   \item{corr}{correlation coefficient}\cr 
