@@ -35,11 +35,11 @@ int N;
     
     vector<double> corr;
     vector<double> indexx;
-
 vector<double> lik;
 
-
-
+vector<vector<double> > res;
+vector<double>resi;
+vector<double> gl;
 
   
      
@@ -54,15 +54,14 @@ double* x=REAL(ra);
 vector<double> a(x, x + LENGTH (ra));
 sample.clear();
 lik.clear();
+ gl.clear();
+ res.clear();
 sample.push_back(a);
 N = sample.at(0).size();
   vector<vector<double> > res = vemema.do_vem(k,tol);  
   SEXP rres;
    PROTECT(rres=allocVector(REALSXP,(res.size()*res.at(0).size())));
-   double* res0=REAL(rres);
-   vector<double> gl;
-   gl.clear();
-   
+   double* res0=REAL(rres);  
   for(int i=0; i<(int)res.size(); ++i){
   for(int j=0; j<(int)res.at(0).size(); ++j){
     gl.push_back(res.at(i).at(j));
@@ -90,14 +89,13 @@ sample.clear();
 lik.clear();
 sample.push_back(a);
 sample.push_back(n);
+   gl.clear();
+   res.clear();
 N = sample.at(0).size();
-  vector<vector<double> > res = vemema.f1();  
+  res = vemema.f1();  
   SEXP rres;
    PROTECT(rres=allocVector(REALSXP,(res.size()*res.at(0).size())));
    double* res0=REAL(rres);
-   vector<double> gl;
-   gl.clear();
-   
   for(int i=0; i<(int)res.size(); ++i){
   for(int j=0; j<(int)res.at(0).size(); ++j){
     gl.push_back(res.at(i).at(j));
@@ -123,16 +121,17 @@ double* y=REAL(rn);
 vector<double> a(x, x + LENGTH (ra));
 vector<double> n(y, y + LENGTH (rn));
 sample.clear();
+ gl.clear();
+ res.clear();
+ lik.clear();
 sample.push_back(a);
 sample.push_back(n);
 N = sample.at(0).size();
 //Rprintf("N =%d \n",N);
-  vector<vector<double> > res = vemema.vem_bivariate(k,tol);  
+ res = vemema.vem_bivariate(k,tol);  
   SEXP rres;
    PROTECT(rres=allocVector(REALSXP,(res.size()*res.at(0).size())));
    double* res0=REAL(rres);
-   vector<double> gl;
-   gl.clear();
    
   for(int i=0; i<(int)res.size(); ++i){
   for(int j=0; j<(int)res.at(0).size(); ++j){
@@ -158,15 +157,15 @@ vector<double> n(y, y + LENGTH (rn));
 sample.clear();
 sample.push_back(a);
 sample.push_back(n);
+   gl.clear();
+   res.clear();
 N = sample.at(0).size();
 //Rprintf("N =%d \n",N);
-  vector<vector<double> > res = vemema.vem_bivariate_grad(k,tol);  
+ res = vemema.vem_bivariate_grad(k,tol);  
   SEXP rres;
    PROTECT(rres=allocVector(REALSXP,(res.size()*res.at(0).size())));
    double* res0=REAL(rres);
-   vector<double> gl;
-   gl.clear();
-   
+  
   for(int i=0; i<(int)res.size(); ++i){
   for(int j=0; j<(int)res.at(0).size(); ++j){
     gl.push_back(res.at(i).at(j));
@@ -187,14 +186,15 @@ tol=REAL(acc)[0];
 double* x=REAL(ra);
 vector<double> a(x, x + LENGTH (ra));
 sample.clear();
+resi.clear();
 sample.push_back(a);
 N = sample.at(0).size();
-  vector<double> res = vemema.ema_ind_uni(tol);  
+ resi= vemema.ema_ind_uni(tol);  
   SEXP rres;
-  PROTECT(rres=allocVector(REALSXP, res.size()));
+  PROTECT(rres=allocVector(REALSXP, resi.size()));
 double* res0=REAL(rres);
-for (int i=0; i<(int)res.size(); i++){
-res0[i]=res.at(i);}
+for (int i=0; i<(int)resi.size(); i++){
+res0[i]=resi.at(i);}
 UNPROTECT(1);
 return rres;
 }   
@@ -209,14 +209,13 @@ double* x=REAL(ra);
 vector<double> a(x, x + LENGTH (ra));
 sample.clear();
 sample.push_back(a);
+ gl.clear();
+ res.clear();
 N = sample.at(0).size();
-  vector<vector<double> > res = vemema.ema_uni(tol);  
+  res = vemema.ema_uni(tol);  
   SEXP rres;
    PROTECT(rres=allocVector(REALSXP,(res.size()*res.at(0).size())));
    double* res0=REAL(rres);
-   vector<double> gl;
-   gl.clear();
-   
   for(int i=0; i<(int)res.size(); ++i){
   for(int j=0; j<(int)res.at(0).size(); ++j){
     gl.push_back(res.at(i).at(j));
@@ -241,15 +240,16 @@ double* y=REAL(rn);
 vector<double> a(x, x + LENGTH (ra));
 vector<double> n(y, y + LENGTH (rn));
 sample.clear();
+resi.clear();
 sample.push_back(a);
 sample.push_back(n);
 N = sample.at(0).size();
-  vector<double> res = vemema.ema_ind(tol);  
+   resi= vemema.ema_ind(tol);  
   SEXP rres;
-  PROTECT(rres=allocVector(REALSXP, res.size()));
+  PROTECT(rres=allocVector(REALSXP, resi.size()));
 double* res0=REAL(rres);
-for (int i=0; i<(int)res.size(); i++){
-res0[i]=res.at(i);}
+for (int i=0; i<(int)resi.size(); i++){
+res0[i]=resi.at(i);}
 UNPROTECT(1);
 return rres;
 }   
@@ -265,15 +265,16 @@ double* y=REAL(rn);
 vector<double> a(x, x + LENGTH (ra));
 vector<double> n(y, y + LENGTH (rn));
 sample.clear();
+resi.clear();
 sample.push_back(a);
 sample.push_back(n);
 N = sample.at(0).size();
-  vector<double> res = vemema.ema_ind_sh(tol);  
+   resi = vemema.ema_ind_sh(tol);  
   SEXP rres;
-  PROTECT(rres=allocVector(REALSXP, res.size()));
+  PROTECT(rres=allocVector(REALSXP, resi.size()));
 double* res0=REAL(rres);
-for (int i=0; i<(int)res.size(); i++){
-res0[i]=res.at(i);}
+for (int i=0; i<(int)resi.size(); i++){
+res0[i]=resi.at(i);}
 UNPROTECT(1);
 return rres;
 }
@@ -289,15 +290,15 @@ double* y=REAL(rn);
 vector<double> a(x, x + LENGTH (ra));
 vector<double> n(y, y + LENGTH (rn));
 sample.clear();
+ gl.clear();
+ res.clear();
 sample.push_back(a);
 sample.push_back(n);
 N = sample.at(0).size();
-  vector<vector<double> > res = vemema.ema_univariat(tol);  
+   res = vemema.ema_univariat(tol);  
   SEXP rres;
    PROTECT(rres=allocVector(REALSXP,(res.size()*res.at(0).size())));
    double* res0=REAL(rres);
-   vector<double> gl;
-   gl.clear();
    
   for(int i=0; i<(int)res.size(); ++i){
   for(int j=0; j<(int)res.at(0).size(); ++j){
@@ -328,9 +329,6 @@ double* p=REAL(pr);
 
 vector<double> a(x, x + LENGTH (ra));
 vector<double> n(y, y + LENGTH (rn));
-//vector<double> v1(d, d + LENGTH (rv1));
-//vector<double> v2(z, z + LENGTH (rv2));
-//vector<double> co(c, c + LENGTH (cor));
 vector<double> l1(e, e + LENGTH (lam1));
 vector<double> l2(f, f + LENGTH (lam2));
 vector<double> pro(p, p + LENGTH (pr));
@@ -338,7 +336,7 @@ sample.clear();
 //var.clear();
 lambda.clear();
 prob.clear();
-//corr.clear();
+resi.clear();
 sample.push_back(a);
 sample.push_back(n);
 //var.push_back(v1);
@@ -348,13 +346,13 @@ lambda.push_back(l2);
 prob=pro;
 //corr=co;
 N = sample.at(0).size();
-  vector<double> res = vemema.ema_ind_start(tol);  
+  resi = vemema.ema_ind_start(tol);  
   
   SEXP rres;
-  PROTECT(rres=allocVector(REALSXP, res.size()));
+  PROTECT(rres=allocVector(REALSXP, resi.size()));
 double* res0=REAL(rres);
-for (int i=0; i<(int)res.size(); i++){
-res0[i]=res.at(i);}
+for (int i=0; i<(int)resi.size(); i++){
+res0[i]=resi.at(i);}
 UNPROTECT(1);
 return rres;
 } 
@@ -372,16 +370,15 @@ double* y=REAL(rn);
 vector<double> a(x, x + LENGTH (ra));
 vector<double> n(y, y + LENGTH (rn));
 sample.clear();
+   gl.clear();
+   res.clear();
 sample.push_back(a);
 sample.push_back(n);
 N = sample.at(0).size();
-  vector<vector<double> > res = vemema.ema_versh(tol);  
+   res = vemema.ema_versh(tol);  
   SEXP rres;
    PROTECT(rres=allocVector(REALSXP,(res.size()*res.at(0).size())));
    double* res0=REAL(rres);
-   vector<double> gl;
-   gl.clear();
-   
   for(int i=0; i<(int)res.size(); ++i){
   for(int j=0; j<(int)res.at(0).size(); ++j){
     gl.push_back(res.at(i).at(j));
@@ -408,14 +405,13 @@ sample.clear();
 sample.push_back(a);
 sample.push_back(n);
 lik.clear();
+ gl.clear();
+ res.clear();
 N = sample.at(0).size();
-  vector<vector<double> > res = vemema.ema_versh_sh(tol);  
+  res = vemema.ema_versh_sh(tol);  
   SEXP rres;
    PROTECT(rres=allocVector(REALSXP,(res.size()*res.at(0).size())));
    double* res0=REAL(rres);
-   vector<double> gl;
-   gl.clear();
-   
   for(int i=0; i<(int)res.size(); ++i){
   for(int j=0; j<(int)res.at(0).size(); ++j){
     gl.push_back(res.at(i).at(j));
@@ -453,9 +449,11 @@ vector<double> l1(e, e + LENGTH (lam1));
 vector<double> l2(f, f + LENGTH (lam2));
 vector<double> pro(p, p + LENGTH (pr));
 sample.clear();
-//var.clear();
+lik.clear();
 lambda.clear();
 prob.clear();
+ gl.clear();
+ res.clear();
 //corr.clear();
 sample.push_back(a);
 sample.push_back(n);
@@ -466,13 +464,10 @@ lambda.push_back(l2);
 prob=pro;
 //corr=co;
 N = sample.at(0).size();
-  vector<vector<double> > res = vemema.ema_versh_start(tol);  
+  res = vemema.ema_versh_start(tol);  
   SEXP rres;
    PROTECT(rres=allocVector(REALSXP,(res.size()*res.at(0).size())));
    double* res0=REAL(rres);
-   vector<double> gl;
-   gl.clear();
-   
   for(int i=0;i<(int)res.size(); ++i){
   for(int j=0; j<(int)res.at(0).size(); ++j){
     gl.push_back(res.at(i).at(j));
@@ -508,20 +503,17 @@ vector<double> v2(z, z + LENGTH (rv2));
 sample.clear();
 var.clear();
 lik.clear();
+   gl.clear();
+   res.clear();
 sample.push_back(a);
 sample.push_back(n);
 var.push_back(v1);
 var.push_back(v2);
-
-
 N = sample.at(0).size();
-  vector<vector<double> > res = vemema.vem_bivariate_meta(k,tol);  
+  res = vemema.vem_bivariate_meta(k,tol);  
   SEXP rres;
    PROTECT(rres=allocVector(REALSXP,(res.size()*res.at(0).size())));
    double* res0=REAL(rres);
-   vector<double> gl;
-   gl.clear();
-   
   for(int i=0;i<(int)res.size(); ++i){
   for(int j=0; j<(int)res.at(0).size(); ++j){
     gl.push_back(res.at(i).at(j));
@@ -544,17 +536,15 @@ double* x=REAL(ra);
 double* y=REAL(rn);
 double* d=REAL(rv1);
 double* z=REAL(rv2);
-
-
 vector<double> a(x, x + LENGTH (ra));
 vector<double> n(y, y + LENGTH (rn));
 vector<double> v1(d, d + LENGTH (rv1));
 vector<double> v2(z, z + LENGTH (rv2));
-
-
 sample.clear();
 var.clear();
 lik.clear();
+res.clear();
+   gl.clear();
 sample.push_back(a);
 sample.push_back(n);
 var.push_back(v1);
@@ -562,13 +552,10 @@ var.push_back(v2);
 
 
 N = sample.at(0).size();
-  vector<vector<double> > res = vemema.f1_meta();  
+  res = vemema.f1_meta();  
   SEXP rres;
    PROTECT(rres=allocVector(REALSXP,(res.size()*res.at(0).size())));
    double* res0=REAL(rres);
-   vector<double> gl;
-   gl.clear();
-   
   for(int i=0;i<(int)res.size(); ++i){
   for(int j=0; j<(int)res.at(0).size(); ++j){
     gl.push_back(res.at(i).at(j));
@@ -591,8 +578,6 @@ double* x=REAL(ra);
 double* y=REAL(rn);
 double* d=REAL(rv1);
 double* z=REAL(rv2);
-
-
 vector<double> a(x, x + LENGTH (ra));
 vector<double> n(y, y + LENGTH (rn));
 vector<double> v1(d, d + LENGTH (rv1));
@@ -602,19 +587,19 @@ sample.clear();
 var.clear();
 lambda.clear();
 prob.clear();
-lik.clear();
+resi.clear();
 sample.push_back(a);
 sample.push_back(n);
 var.push_back(v1);
 var.push_back(v2);
 
 N = sample.at(0).size();
-  vector<double> res = vemema.ema_ind_meta(tol);  
+  resi = vemema.ema_ind_meta(tol);  
   SEXP rres;
-  PROTECT(rres=allocVector(REALSXP, res.size()));
+  PROTECT(rres=allocVector(REALSXP, resi.size()));
 double* res0=REAL(rres);
-for (int i=0; i<(int)res.size(); i++){
-res0[i]=res.at(i);}
+for (int i=0; i<(int)resi.size(); i++){
+res0[i]=resi.at(i);}
 UNPROTECT(1);
 return rres;
 } 
@@ -629,8 +614,6 @@ double* x=REAL(ra);
 double* y=REAL(rn);
 double* d=REAL(rv1);
 double* z=REAL(rv2);
-
-
 vector<double> a(x, x + LENGTH (ra));
 vector<double> n(y, y + LENGTH (rn));
 vector<double> v1(d, d + LENGTH (rv1));
@@ -640,19 +623,19 @@ sample.clear();
 var.clear();
 lambda.clear();
 prob.clear();
-lik.clear();
+resi.clear();
 sample.push_back(a);
 sample.push_back(n);
 var.push_back(v1);
 var.push_back(v2);
 
 N = sample.at(0).size();
-  vector<double> res = vemema.ema_ind_meta_sh(tol);  
+ resi = vemema.ema_ind_meta_sh(tol);  
   SEXP rres;
-  PROTECT(rres=allocVector(REALSXP, res.size()));
+  PROTECT(rres=allocVector(REALSXP, resi.size()));
 double* res0=REAL(rres);
-for (int i=0; i<(int)res.size(); i++){
-res0[i]=res.at(i);}
+for (int i=0; i<(int)resi.size(); i++){
+res0[i]=resi.at(i);}
 UNPROTECT(1);
 return rres;
 } 
@@ -694,14 +677,14 @@ var.push_back(v1);
 var.push_back(v2);
 lambda.push_back(l1);
 lambda.push_back(l2);
+gl.clear();
+res.clear();
 prob=pro;
 N = sample.at(0).size();
-  vector<vector<double> > res = vemema.ema_versh_meta(tol);  
+  res = vemema.ema_versh_meta(tol);  
   SEXP rres;
    PROTECT(rres=allocVector(REALSXP,(res.size()*res.at(0).size())));
    double* res0=REAL(rres);
-   vector<double> gl;
-   gl.clear();
    
   for(int i=0;i<(int)res.size(); ++i){
   for(int j=0; j<(int)res.at(0).size(); ++j){
@@ -711,6 +694,7 @@ N = sample.at(0).size();
 for (int i=0; i<(int)gl.size(); i++){
        
 res0[i]=gl.at(i);}
+
 UNPROTECT(1);
 return rres;
 }
@@ -743,7 +727,7 @@ sample.clear();
 var.clear();
 lambda.clear();
 prob.clear();
-lik.clear();
+resi.clear();
 sample.push_back(a);
 sample.push_back(n);
 var.push_back(v1);
@@ -752,12 +736,12 @@ lambda.push_back(l1);
 lambda.push_back(l2);
 prob=pro;
 N = sample.at(0).size();
-  vector<double> res = vemema.ema_ind_meta_start(tol);  
+resi = vemema.ema_ind_meta_start(tol);  
   SEXP rres;
-  PROTECT(rres=allocVector(REALSXP, res.size()));
+  PROTECT(rres=allocVector(REALSXP, resi.size()));
 double* res0=REAL(rres);
-for (int i=0; i<(int)res.size(); i++){
-res0[i]=res.at(i);}
+for (int i=0; i<(int)resi.size(); i++){
+res0[i]=resi.at(i);}
 UNPROTECT(1);
 return rres;
 } 
@@ -772,8 +756,6 @@ double* x=REAL(ra);
 double* y=REAL(rn);
 double* d=REAL(rv1);
 double* z=REAL(rv2);
-
-
 vector<double> a(x, x + LENGTH (ra));
 vector<double> n(y, y + LENGTH (rn));
 vector<double> v1(d, d + LENGTH (rv1));
@@ -786,13 +768,13 @@ sample.push_back(n);
 var.push_back(v1);
 var.push_back(v2);
 lik.clear();
+res.clear();
+   gl.clear();
 N = sample.at(0).size();
-  vector<vector<double> > res = vemema.ema_meta(tol);  
+ res = vemema.ema_meta(tol);  
   SEXP rres;
    PROTECT(rres=allocVector(REALSXP,(res.size()*res.at(0).size())));
    double* res0=REAL(rres);
-   vector<double> gl;
-   gl.clear();
    
   for(int i=0;i<(int)res.size(); ++i){
   for(int j=0; j<(int)res.at(0).size(); ++j){
@@ -817,8 +799,6 @@ double* x=REAL(ra);
 double* y=REAL(rn);
 double* d=REAL(rv1);
 double* z=REAL(rv2);
-
-
 vector<double> a(x, x + LENGTH (ra));
 vector<double> n(y, y + LENGTH (rn));
 vector<double> v1(d, d + LENGTH (rv1));
@@ -827,19 +807,19 @@ vector<double> v2(z, z + LENGTH (rv2));
 sample.clear();
 var.clear();
 lik.clear();
+  gl.clear();
+  res.clear();
 sample.push_back(a);
 sample.push_back(n);
 var.push_back(v1);
 var.push_back(v2);
 
 N = sample.at(0).size();
-  vector<vector<double> > res = vemema.ema_meta_sh(tol);  
+   res = vemema.ema_meta_sh(tol);  
   SEXP rres;
    PROTECT(rres=allocVector(REALSXP,(res.size()*res.at(0).size())));
    double* res0=REAL(rres);
-   vector<double> gl;
-   gl.clear();
-   
+  
   for(int i=0;i<(int)res.size(); ++i){
   for(int j=0; j<(int)res.at(0).size(); ++j){
     gl.push_back(res.at(i).at(j));
@@ -1943,9 +1923,9 @@ vector<vector<double> >  VEMEMA::vem_bivariate_grad(int start_nr_cl, double tol)
 {
   assert(start_nr_cl <= N);
 
-//  cout << endl << "### vertex-exchange-method ###" << endl;
+ // cout << endl << "### vertex-exchange-method ###" << endl;
 
-  int i, j, i_min, i_max;
+  int i, i_min, i_max;
   double step;
   double grad_max;
 vector<vector<double> > result;
@@ -1998,7 +1978,7 @@ vector<vector<double> > result;
 
   double min;
 
-  for(i=0; i<p.size(); ++i)
+  for(i=0; i<(int)p.size(); ++i)
   //  if(p.at(i)>0 && p.at(i)<0.01)
       {
 	get_min(p,min,i_min);
@@ -2012,7 +1992,7 @@ vector<vector<double> > result;
   lambda.resize(sample.size());
   prob.clear();
 
-  for(i=0; i<p.size(); ++i)
+  for(i=0; i<(int)p.size(); ++i)
     //if(p.at(i) != 0)
       {
 	lambda.at(0).push_back(l.at(0).at(i));
@@ -2295,7 +2275,7 @@ return result;
 vector<vector<double> > VEMEMA::do_vem(int  start_nr_cl, double tol)
 {
 	int i, j, n;
-double lh,den;
+double lh;
 	vector<vector<double> > lam;
 	vector<vector<double> > pr;
     vector<vector<double> > result;
@@ -2345,8 +2325,8 @@ double lh,den;
 		
 		
 	 get_variance();
-    for(i=0; i<sample.at(0).size(); ++i){
-      	for(j=0; j<lambda.at(0).size(); ++j){
+    for(i=0; i<(int)sample.at(0).size(); ++i){
+      	for(j=0; j<(int)lambda.at(0).size(); ++j){
 	density_uni(i,j);
 	 mix_den_uni(i);}}
     lh = likelihood_uni();
@@ -2395,7 +2375,8 @@ vem_bivariate(k, tol);
   int dim = lambda.size();
   int k   = lambda.at(0).size();
 
-  double den, P, h, lh, lh_new;
+  double den, P, h;
+  //double lh, lh_new;
 
   get_variance();
 
@@ -2504,7 +2485,7 @@ vector<double> result;
     for(j=0; j<k; ++j)
       corr_new.at(j) /= sqrt(var_new.at(0).at(j)*var_new.at(1).at(j));
 
-    lh = likelihood();
+  //  lh = likelihood();
 
 	get_max_min(grad, prob_new, i_max, i_min, grad_max);
 
@@ -2516,7 +2497,7 @@ vector<double> result;
 
     //get_corr();
 
-    lh_new = likelihood();
+  //  lh_new = likelihood();
 
     //diff = abs(lh-lh_new);
 
@@ -2550,7 +2531,8 @@ vector<vector<double> > dens;
   int dim = lambda.size();
   int k   = lambda.at(0).size();
 
-  double den, P, h, lh, lh_new;
+  double den, P, h;
+//  double lh, lh_new;
 
   get_variance();
 
@@ -2655,7 +2637,7 @@ get_dens1(lambda_new, dens);
 
 	get_max_min(grad, prob_new, i_max, i_min, grad_max);
 
-    lh = likelihood();
+    //lh = likelihood();
 
     lambda  = lambda_new;
     prob    = prob_new;
@@ -2664,7 +2646,7 @@ get_dens1(lambda_new, dens);
 
     //get_corr();
 
-    lh_new = likelihood();
+  //  lh_new = likelihood();
 
    // diff = abs(lh-lh_new);
 
@@ -2699,7 +2681,8 @@ vector<vector<double> > dens;
   int dim = lambda.size();
   int k   = lambda.at(0).size();
 
-  double den, P, h, lh, lh_new;
+  double den, P, h;
+//  double lh, lh_new;
 
   get_variance();
 
@@ -2801,7 +2784,7 @@ dens.clear();
 get_dens(sample.at(0), lambda_new.at(0), dens);
 	gradient(dens, prob_new, grad);
 	get_max_min(grad, prob_new, i_max, i_min, grad_max);
-    lh = likelihood_uni();
+   // lh = likelihood_uni();
 
     lambda  = lambda_new;
     prob    = prob_new;
@@ -2810,7 +2793,7 @@ get_dens(sample.at(0), lambda_new.at(0), dens);
 
     //get_corr();
 
-    lh_new = likelihood_uni();
+  //  lh_new = likelihood_uni();
 
   //  diff = abs(lh-lh_new);
 
@@ -2831,8 +2814,7 @@ vector<double>VEMEMA::ema_ind_start(double tol)
   //f1();
 //vem_bivariate(k, tol);
 int  i_min, i_max;
- double grad_max,oldgrad;
-vector<double> lik;
+ double grad_max;
  vector<double> grad;
   grad.clear();
 
@@ -2843,7 +2825,8 @@ vector<vector<double> > dens;
   int dim = lambda.size();
   int k   = lambda.at(0).size();
 
-  double den, P, h, lh, lh_new;
+  double den, P, h;
+  //double lh, lh_new;
 
   get_variance();
 
@@ -2861,7 +2844,7 @@ vector<double> result;
   //cout << endl << "### expectation-maximization algorithm ###" << endl;
 
   //double diff = 100;
-  oldgrad=100;
+  
  while(abs(grad_max-1.) > tol && it < numiter)
   {
     //cout << "iteration: " << it << endl;
@@ -2948,9 +2931,8 @@ dens.clear();
 	gradient(dens, prob_new, grad);
 
 	get_max_min(grad, prob_new, i_max, i_min, grad_max);
-	if(abs(oldgrad-grad_max)<1.E-7) break;
-    oldgrad=grad_max;
-    lh = likelihood();
+	
+   // lh = likelihood();
 
     lambda  = lambda_new;
     prob    = prob_new;
@@ -2959,7 +2941,7 @@ dens.clear();
 
     //get_corr();
 
-    lh_new = likelihood();
+    //lh_new = likelihood();
 
     //diff = abs(lh-lh_new);
 
@@ -2993,7 +2975,8 @@ vector<vector<double> > dens;
   int dim = lambda.size();
   int k   = lambda.at(0).size();
 
-  double den, P, h, lh, lh_new;
+  double den, P, h;
+  //double lh, lh_new;
 
   //get_variance();
 
@@ -3097,7 +3080,7 @@ vector<double> result;
 
 	  gradient(dens, prob_new, grad);
 	     get_max_min(grad, prob_new, i_max, i_min, grad_max);
-    lh = likelihood_meta();
+   // lh = likelihood_meta();
 
     lambda  = lambda_new;
     prob    = prob_new;
@@ -3106,7 +3089,7 @@ vector<double> result;
 
     //get_corr();
 
-    lh_new = likelihood_meta();
+//    lh_new = likelihood_meta();
 
    // diff = abs(lh-lh_new);
 
@@ -3143,7 +3126,8 @@ vector<vector<double> > dens;
   int dim = lambda.size();
   int k   = lambda.at(0).size();
 
-  double den, P, h, lh, lh_new;
+  double den, P, h;
+  //double lh, lh_new;
 
   //get_variance();
 
@@ -3248,7 +3232,7 @@ get_dens_meta(lambda_new, dens);
 
 	  gradient(dens, prob_new, grad);
 	     get_max_min(grad, prob_new, i_max, i_min, grad_max);
-    lh = likelihood_meta();
+   // lh = likelihood_meta();
 
     lambda  = lambda_new;
     prob    = prob_new;
@@ -3257,7 +3241,7 @@ get_dens_meta(lambda_new, dens);
 
     //get_corr();
 
-    lh_new = likelihood_meta();
+   // lh_new = likelihood_meta();
 
   //  diff = abs(lh-lh_new);
 
@@ -3292,7 +3276,8 @@ vector<vector<double> > dens;
   int dim = lambda.size();
   int k   = lambda.at(0).size();
 
-  double den, P, h, lh, lh_new;
+  double den, P, h;
+  //double lh, lh_new;
 
   //get_variance();
 
@@ -3392,7 +3377,7 @@ vector<double> result;
   //  for(j=0; j<k; ++j)
 //      corr_new.at(j) /= sqrt(var_new.at(0).at(j)*var_new.at(1).at(j));
 
-    lh = likelihood_meta();
+   // lh = likelihood_meta();
       get_dens_meta(lambda_new, dens);
 
 	  gradient(dens, prob_new, grad);
@@ -3405,7 +3390,7 @@ vector<double> result;
 
     //get_corr();
 
-    lh_new = likelihood_meta();
+  //  lh_new = likelihood_meta();
 
   //  diff = abs(lh-lh_new);
 
@@ -3423,7 +3408,7 @@ vector<double> result;
 
 vector<vector<double> >  VEMEMA::ema_uni(double tol)
 {
-  int i, j, l,maxiter;
+  int i, j, l;
   int it=1;
   //cout<<"k= "<<k<<endl;
   //k=30;
@@ -3431,8 +3416,7 @@ vector<vector<double> >  VEMEMA::ema_uni(double tol)
    int dim = lambda.size();
   int k   = lambda.at(0).size();
 int  i_min, i_max;
- double grad_max,oldgrad;
-vector<double> lik;
+ double grad_max;
  vector<double> grad;
   grad.clear();
 
@@ -3443,7 +3427,7 @@ vector<vector<double> > dens;
   //f1();
 //vem_bivariate(10, tol);
 
-  double den, P, h, lh, lh_new;
+  double den, P, h, lh_new;
 
   
   get_variance();
@@ -3464,7 +3448,7 @@ vector<vector<double> > dens;
 // cout << endl << "### expectation-maximization algorithm ###" << endl;
 
   //double diff = 100;
-oldgrad=100;
+
  while(abs(grad_max-1.) > tol && it < numiter)
   {
     //cout << "iteration: " << it << endl;
@@ -3536,12 +3520,10 @@ var_new.at(l).at(j) +=  e.at(i).at(j)*pow(sample.at(l).at(i)-lambda.at(l).at(j),
 
     //corr_new = vector<double>(k,c/sqrt(v.at(0)*v.at(1)));
 
-    lh = likelihood_uni();
+//    lh = likelihood_uni();
 get_dens(sample.at(0), lambda_new.at(0), dens);
 	gradient(dens, prob_new, grad);
 	get_max_min(grad, prob_new, i_max, i_min, grad_max);
-if(abs(oldgrad-grad_max)<1.E-7) break;
-    oldgrad=grad_max;
     lambda  = lambda_new;
     prob    = prob_new;
     var     = var_new;
@@ -3615,7 +3597,8 @@ vector<vector<double> > dens;
   int dim = lambda.size();
   int k   = lambda.at(0).size();
 
-  double den, P, h, lh, lh_new;
+  double den, P, h;
+ // double lh, lh_new;
 
   get_variance();
 
@@ -3709,7 +3692,7 @@ vector<vector<double> > dens;
 	gradient(dens, prob_new, grad);
 	get_max_min(grad, prob_new, i_max, i_min, grad_max);
 
-    lh = likelihood();
+  //  lh = likelihood();
 
     lambda  = lambda_new;
     prob    = prob_new;
@@ -3718,7 +3701,7 @@ vector<vector<double> > dens;
 
     //get_corr();
 
-    lh_new = likelihood();
+  //  lh_new = likelihood();
 
   //  diff = abs(lh-lh_new);
 
@@ -4232,7 +4215,7 @@ vector<vector<double> > dens;
   //double diff = 100;
 while(abs(grad_max-1.) > tol && it < numiter)
   {
-    // cout << "iteration: " << it << endl;
+    //cout << "iteration: " << it << endl;
 
 
     e.clear();
@@ -4506,8 +4489,8 @@ vector<vector<double> > VEMEMA::ema_versh_start(double tol)
  //f1();
  //vem_bivariate(k,tol);
  int  i_min, i_max;
- double grad_max,oldgrad;
-vector<double> lik;
+ double grad_max;
+//vector<double> lik;
  vector<double> grad;
   grad.clear();
 
@@ -4518,7 +4501,7 @@ vector<vector<double> > dens;
   int dim = lambda.size();
   int k   = lambda.at(0).size();
 
-  double den, P, h, lh, lh_new;
+  double den, P, h,lh_new;
 
   get_variance();
 
@@ -4535,7 +4518,7 @@ vector<vector<double> > dens;
   //cout << endl << "### expectation-maximization algorithm ###" << endl;
 
   //double diff = 100;
-oldgrad=100;
+
  while(abs(grad_max-1.) > tol && it < numiter)
   {
    // cout << "iteration: " << it <<"grad"<<grad_max<<endl;
@@ -4615,8 +4598,7 @@ oldgrad=100;
 	gradient(dens, prob_new, grad);
 
 	get_max_min(grad, prob_new, i_max, i_min, grad_max);
-	if(abs(oldgrad-grad_max)<1.E-7) break;
-    oldgrad=grad_max;
+
     lambda  = lambda_new;
     prob    = prob_new;
     var     = var_new;

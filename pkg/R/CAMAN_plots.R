@@ -1,8 +1,3 @@
-# TODO: histograms nicer
-# 
-# Author: Johannes
-###############################################################################
-
 hist.CAMAN.object <- function(x, nbreaks=NULL, mixdens=TRUE, mixdens.col="red", 
                               return.mixdens=FALSE, data.plot=NULL, singleDistr=TRUE, 
                               main="", xlab="", plotlegend=TRUE, ...){

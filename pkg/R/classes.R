@@ -1,5 +1,3 @@
-#setup data structure
-
 setClass("CAMAN.object", representation(dat="matrix", family="character", 
                                         LL="numeric", num.k="numeric", p="numeric", t="numeric",  component.var = "numeric", 
                                         prob="matrix", classification = "numeric", num.obs="numeric", steps = "numeric", 
@@ -116,7 +114,7 @@ print(object@RESULT_meta[,])}
 else if(length(object@RESULT>1)){
 
 cat("Vem for bivariate data: \n \n")  
-colnames(object@RESULT)<- c("Lambda","Lambda_2","Prob")
+colnames(object@RESULT)<- c("Lambda_1","Lambda_2","Prob")
 cat("RESULT: \n \n" ) 
 print(object@RESULT[,])
 }

@@ -1,4 +1,4 @@
-mixalg = function(obs, weights=NULL, family="gaussian", data=NULL, 
+ mixalg = function(obs, weights=NULL, family="gaussian", data=NULL, 
                   pop.at.risk=NULL, var.lnOR=NULL, limit=0.01, 
                   acc=10^(-7), numiter=5000, startk=50){        
     # Performs CAMAN (computer-assisted analysis of mixtures)
@@ -667,7 +667,7 @@ l<-len/5
 lam1<-er[1:l]
 lam2<-er[(l+1):(2*l)]
 prob<-er[((2*l)+1):(3*l)]
-ll<-er[(3*l+1):(4*l)]
+ll<-er[((3*l)+1)]
 max_grad<-er[(4*l+1):len]
 bic <- -2 * ll[1] + (3*length(prob)- 1) * log(length(obs1))
 
