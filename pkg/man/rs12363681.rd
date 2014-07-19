@@ -5,17 +5,22 @@
 \description{
 This data set can be used to perform a cluster analyis of bivariate data.  \cr
 
-This data set contains SNP of 3564 individuala 
+This data set contains SNP of 3680 individuala 
 }
 \usage{data("rs12363681")}
-\format{A data frame consisting of 15 data sets (rows) and 11 attributes (columns)}
+\format{A data frame consisting of 3680 data sets (rows) and 2 attributes (columns)}
 \examples{
 #Example
-#Homogeneous Metaregression adjusting for study type and year of publication
-
+#1.EM and classification for bivariate data
+#Examples
 data(rs12363681)
-
-
+test <- bivariate.mixalg(obs1=x, obs2=y, type="bi", 
+                         lambda1=0, lambda2=0, p=0, 
+                         data=rs12363681, startk=20, class="TRUE")
+#scatter plot with ellipse
+plot(test)
+#scatter plot without ellipse
+plot(test, ellipse = FALSE)
 }
 \references{
 Schlattmann, P.(2009) \emph{Medical Applications of Finite Mixture Models.} Berlin: Springer.
