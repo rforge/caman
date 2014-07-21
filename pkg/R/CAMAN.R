@@ -677,8 +677,6 @@ bivariate.EM<-function(obs1,obs2,type,data = NULL, var1, var2, corr, lambda1, la
     z4<-function(a,n,v1,v2,l1,l2,p, numiter,acc){.Call("ema_ind_meta_st", as.vector(a), as.vector(n),as.vector(v1),as.vector(v2),as.vector(l1),as.vector(l2),as.vector(p),as.integer(numiter), as.double(acc), PACKAGE = "CAMAN")}
     er<-z4(obs1,obs2,var1,var2,lambda1,lambda2,p, numiter,acc)
     
-    
-    
     if (class=="TRUE"){
       res<-new("CAMAN.BIEM.object", RESULT=ERG1 ,BIC=bic,LL=ll[1], cl=er)}
     if (class=="FALSE"){

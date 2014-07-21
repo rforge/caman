@@ -26,6 +26,7 @@ bivariate.EM(obs1, obs2, type, data = NULL,
 \item{class}{classification of studies?} \cr
 }
 \examples{
+\dontrun{
 # 1.EM and classification for bivariate data with starting values
 data(rs12363681)
 lambda1<-c(1540.97, 837.12, 945.40, 1053.69)
@@ -37,7 +38,8 @@ test<-bivariate.EM(obs1=x, obs2=y, type="bi", lambda1=lambda1,lambda2=lambda2,
 plot(test, ellipse=TRUE)
 # scatter plot without ellipse
 plot(test, ellipse=FALSE)
-# 2.	EM-algorithm for a diagnostic meta-analysis with bivariate 
+}
+# 2. EM-algorithm for a diagnostic meta-analysis with bivariate 
 #    normally distributed data and study specific fixed variances
 data(CT)
 p2<-c(0.4,0.6)
