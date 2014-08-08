@@ -72,7 +72,9 @@ Peter Schlattmann and Johannes Hoehne
 \examples{
 ### POISSON data with weights: thai_cohort
 data(thai_cohort)
-m.thai<- mixalg(obs="counts",weights="frequency",family="poisson",data=thai_cohort)
+m.thai <- mixalg(obs="counts", weights="frequency",
+                 family="poisson", data=thai_cohort,
+                 acc = 0.00003)
 \dontrun{boot <- mixalg.boot(m.thai, nboot=1000)} #may take a few minutes
 
 ### POISSON data with observed and expected data: hepab

@@ -1658,7 +1658,7 @@ void VEMEMA::vem(int col, int start_nr_cl, double tol, vector<double>& l_out, ve
 
 	int i_min, i_max;
 	double step;
-	double grad_max;
+	double grad_max=0;
 	vector<vector<double> > dens;
 	vector<double> grad;
 	vector<double> s = sample.at(col);
@@ -1806,7 +1806,7 @@ vector<vector<double> >  VEMEMA::vem_bivariate(int start_nr_cl, double tol)
 
 	int i,  i_min, i_max;
 	double step;
-	double grad_max;
+	double grad_max=0.;
 
 	vector<vector<double> > l;
 	vector<double> p;
@@ -1927,7 +1927,7 @@ vector<vector<double> >  VEMEMA::vem_bivariate_grad(int start_nr_cl, double tol)
 
   int i, i_min, i_max;
   double step;
-  double grad_max;
+  double grad_max=0.;
 vector<vector<double> > result;
   vector<vector<double> > l;
   vector<double> p;
@@ -2029,7 +2029,8 @@ vector<vector<double> >  VEMEMA::vem_bivariate_meta(int start_nr_cl, double tol)
 
   int i,i_min, i_max;
   double step;
-  double grad_max,ll;
+  double grad_max=0.;
+  double ll;
 
   vector<vector<double> > l;
   vector<double> p;
@@ -2382,7 +2383,7 @@ vem_bivariate(k, tol);
 
   get_corr();
 int  i_min, i_max;
- double grad_max;
+ double grad_max=0.;
 
  vector<double> grad;
   grad.clear();
@@ -2518,7 +2519,7 @@ vector<double>VEMEMA::ema_ind_sh(double tol)
   int it=1;
   f1();
   int  i_min, i_max;
- double grad_max;
+ double grad_max=0.;
 
  vector<double> grad;
   grad.clear();
@@ -2668,7 +2669,7 @@ vector<double>VEMEMA::ema_ind_uni(double tol)
   do_vem(k,tol);
   
 int  i_min, i_max;
- double grad_max;
+ double grad_max=0.;
 
  vector<double> grad;
   grad.clear();
@@ -2814,7 +2815,7 @@ vector<double>VEMEMA::ema_ind_start(double tol)
   //f1();
 //vem_bivariate(k, tol);
 int  i_min, i_max;
- double grad_max;
+ double grad_max=0.;
  vector<double> grad;
   grad.clear();
 
@@ -2961,7 +2962,7 @@ vector<double>VEMEMA::ema_ind_meta_start(double tol)
   int it=1;
   
   int  i_min, i_max;
- double grad_max;
+ double grad_max=0.;
 
  vector<double> grad;
   grad.clear();
@@ -3112,7 +3113,7 @@ vector<double>VEMEMA::ema_ind_meta_sh(double tol)
  f1_meta();
  
 int  i_min, i_max;
- double grad_max;
+ double grad_max=0.;
 
  vector<double> grad;
   grad.clear();
@@ -3264,7 +3265,7 @@ vector<double>VEMEMA::ema_ind_meta(double tol)
 vem_bivariate_meta(k, tol);
 
 int  i_min, i_max;
- double grad_max;
+ double grad_max=0.;
 
  vector<double> grad;
   grad.clear();
@@ -3416,7 +3417,7 @@ vector<vector<double> >  VEMEMA::ema_uni(double tol)
    int dim = lambda.size();
   int k   = lambda.at(0).size();
 int  i_min, i_max;
- double grad_max;
+ double grad_max=0.;
  vector<double> grad;
   grad.clear();
 
@@ -3583,7 +3584,7 @@ vector<vector<double> > VEMEMA::ema_univariat(double tol)
   int it=1;
   do_vem(k,tol);
   int  i_min, i_max;
- double grad_max;
+ double grad_max=0.;
 
  vector<double> grad;
   grad.clear();
@@ -3734,7 +3735,7 @@ vector<vector<double> > VEMEMA::ema_versh(double tol)
   int k   = lambda.at(0).size();
  
  int  i_min, i_max;
- double grad_max;
+ double grad_max=0.;
  vector<double> lik;
  vector<double> grad;
   grad.clear();
@@ -3891,7 +3892,7 @@ vector<vector<double> > VEMEMA::ema_versh_sh(double tol)
   int it=1;
  f1();
  int  i_min, i_max;
- double grad_max;
+ double grad_max=0.;
 
  vector<double> grad;
   grad.clear();
@@ -4041,7 +4042,7 @@ int  i_min, i_max;
   int k   = lambda.at(0).size();
 
   double den, P, h,  lh_new;
- double grad_max;
+ double grad_max=0.;
   //get_variance();
 
 //  get_corr();
@@ -4183,7 +4184,7 @@ vector<vector<double> > VEMEMA::ema_meta(double tol)
   int it=1;
   vem_bivariate_meta(k,tol);
   int  i_min, i_max;
- double grad_max;
+ double grad_max=0.;
 
  vector<double> grad;
   grad.clear();
@@ -4337,7 +4338,7 @@ vector<vector<double> > VEMEMA::ema_meta_sh(double tol)
 f1_meta();
 
 int  i_min, i_max;
- double grad_max;
+ double grad_max=0.;
 
  vector<double> grad;
   grad.clear();
@@ -4489,7 +4490,7 @@ vector<vector<double> > VEMEMA::ema_versh_start(double tol)
  //f1();
  //vem_bivariate(k,tol);
  int  i_min, i_max;
- double grad_max;
+ double grad_max=0.;
 //vector<double> lik;
  vector<double> grad;
   grad.clear();
