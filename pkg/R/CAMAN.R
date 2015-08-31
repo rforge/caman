@@ -958,7 +958,7 @@ CAMANboot<-function(obs1,obs2,var1,var2,lambda11,lambda12,prob1,lambda21,lambda2
 k_1<-matrix(nrow=rep,ncol=(length(lambda11)*3+2))
 k_2<-matrix(nrow=rep,ncol=(length(lambda21)*3+2))
 
-#print("###Bootstrap für Metadaten mit Startwerten")
+#print("###Bootstrap fuer Metadaten mit Startwerten")
 fun<-function(a,n,v1,v2,l1,l2,pro,numiter,acc){.Call("ema_meta_st", as.vector(a), as.vector(n),as.vector(v1),as.vector(v2),as.vector(l1),as.vector(l2),as.vector(pro),as.integer(numiter), as.double(acc), PACKAGE = "CAMAN")}
 j<-0
 repeat{
