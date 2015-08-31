@@ -44,7 +44,7 @@ mixcov(dep, fixed, random="", data, k, weight=NULL, pop.at.risk=NULL,
      fixed effects. Vector or colname of \code{data}. Must be specified!
 	}
 	   \item{random}{
-     fixed effects. Vector or colname of \code{data}. Must be specified!
+     random effects. Vector or colname of \code{data}. Must be specified!
 	}
 	 \item{k}{
    number of components.
@@ -53,13 +53,13 @@ mixcov(dep, fixed, random="", data, k, weight=NULL, pop.at.risk=NULL,
 	weights of the data. Vector or colname of \code{data}. Default is \code{NULL}.
 	}
   \item{family}{
-        the underlying type density function as a character ("gaussian", "poisson" or "binomial")!
+        the underlying type density function as a character ("gaussian" or "poisson")!
         }
   \item{data}{
         an optional data frame. \code{obs}, \code{weights}, \code{pop.at.risk} and \code{var.lnOR} can be specified as column name of the data frame. 
         }      
   \item{pop.at.risk}{
-  	population at risk: These data could be used to determine a mixture model for Poisson data. Vector or colname of \code{data}. Default is\code{NULL}. 
+  	population at risk: An offset that could be used to determine a mixture model for Poisson data from unequally large populations at risk. Vector or colname of \code{data}. Default is\code{NULL}. 
   }
   \item{var.lnOR}{
     variances of the data: These variances might be given when working with meta analyses! Vector or colname of \code{data}. Default is \code{NULL}.

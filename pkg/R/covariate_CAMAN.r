@@ -7,6 +7,7 @@ mixcov <- function(dep,fixed,random="",data,k,weight=NULL, pop.at.risk=NULL,
                    var.lnOR=NULL, family="gaussian", maxiter=50, 
                    acc=10^-7, returnHomogeneousModel = FALSE)
 {
+  stopifnot(family %in% c("gaussian", "poisson")) # disable binomial for now as it is not working as intended
     cl <- match.call()
 	nn <- nrow(data)	
 	if (!is.null(pop.at.risk) && family=="binomial"){
