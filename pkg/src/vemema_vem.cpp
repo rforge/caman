@@ -1,6 +1,6 @@
 #include<iostream>
 #include<fstream>
-#include<assert.h>
+//#include<assert.h>
 #include<math.h>
 #include <cmath>
 #include "vemema.h"
@@ -928,7 +928,7 @@ double VEMEMA::variance(vector<double>& v, double m)
 double VEMEMA::correlation(vector<double>& vec1, vector<double>& vec2, double m1, double m2, double v1, double v2)
 {
 	int s = vec1.size();
-	assert(s == (int)vec2.size());
+	//assert(s == (int)vec2.size());
 
 	int i;
 	double c = 0.;
@@ -1334,7 +1334,7 @@ void VEMEMA::gradient(vector<vector<double> >& dens, vector<double>& p, vector<d
 
 void VEMEMA::get_min(vector<double>& v, double& min, int& i_min)
 {
-	assert(v.size()>0);
+	// assert(v.size()>0);
 
 	min = 1.;
 	for(int i=0; i<(int)v.size(); ++i)
@@ -1626,7 +1626,7 @@ vector<double>s1;
 ///          v_out - Ergebnissmatrix 
 void VEMEMA::grid(vector<vector<double> >& v_in, vector<vector<double> >& v_out)
 {
-	assert(v_in.size()==2);
+	// assert(v_in.size()==2);
 
 	int i,j;
 
@@ -1921,7 +1921,7 @@ return result;
 }
 vector<vector<double> >  VEMEMA::vem_bivariate_grad(int start_nr_cl, double tol)
 {
-  assert(start_nr_cl <= N);
+  // assert(start_nr_cl <= N);
 
  // cout << endl << "### vertex-exchange-method ###" << endl;
 
@@ -2023,7 +2023,7 @@ return result;
 
 vector<vector<double> >  VEMEMA::vem_bivariate_meta(int start_nr_cl, double tol)
 {
-  assert(start_nr_cl <= N);
+  // assert(start_nr_cl <= N);
 
   //cout << endl << "### vertex-exchange-method ###" << endl;
 

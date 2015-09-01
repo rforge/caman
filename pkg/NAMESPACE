@@ -28,3 +28,11 @@ S3method(plot, CAMAN.BIMIXALG.object)
 import(sp)
 import(mvtnorm)
 import(methods)
+
+importFrom("graphics", "hist", "legend", "lines", "par", "persp",
+             "points")
+importFrom("stats", "as.formula", "coef", "coefficients", "cor",
+             "dbinom", "deviance", "dnorm", "dpois", "fitted",
+             "gaussian", "glm", "na.omit", "predict", "qchisq",
+             "quantile", "rbinom", "rnorm", "rpois", "runif", "sd",
+             "var")
