@@ -31,12 +31,12 @@ mix->acc= *ACC;      // Max. level of accuracy
 mix->maxstep = *NUMSTEP;   // Max. number of iterations
 
 
-char * buffer;
+//char * buffer; // removed by PD because sprintf caused an error on Solaris (pointed out by Brian Ripley)
 /*LLstore1 = (double *) R_alloc(nBoot, sizeof(double));  //max no. of bootstraps is 5.000
 LLstore2 = (double *) R_alloc(nBoot, sizeof(double));*/
 position = 0;
 
-buffer = (char *) R_alloc(255, sizeof(char));
+//buffer = (char *) R_alloc(255, sizeof(char)); // removed by PD because sprintf caused an error on Solaris (pointed out by Brian Ripley)
 
 
 for(i=0; i< nBoot; i++){
@@ -66,7 +66,7 @@ for(i=0; i< nBoot; i++){
   mix0->EM(mix->numstep); 
   LL_k1[i] = mix0->likelihood ();
   //if (i % int(nBoot /10) == 9) Rprintf ("|");
-  snprintf (buffer, (size_t)255, "%d", *(NROWx + i));
+//  snprintf (buffer, (size_t)255, "%d", *(NROWx + i));// removed by PD because sprintf caused an error on Solaris (pointed out by Brian Ripley)
   //MessageBox (0, buffer, "START", MB_ICONINFORMATION);  
 }
 
