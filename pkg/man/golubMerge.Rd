@@ -13,7 +13,7 @@ The data are from Golub et al. These are the combined training samples and test 
 A matrix with 7129 rows (for the genes) and 72 columns (for the patients).
 }
 
-\note{The data also appear in the bioconductor package \code{golubEsets} in a different format. See Schlattmann (2009) for details on how to handle this type of data.}
+\note{The data also appear in the Bioconductor package \code{golubEsets} in a different format. See Schlattmann (2009) for details on how to handle this type of data.}
 
 \examples{
 \dontrun{
@@ -34,9 +34,7 @@ getFDR(mix, threshold=.4)
 }
 
 
-\source{
-\url{http://www-genome.wi.mit.edu/mpr/data_set_ALL_AML.html}
-}
+\source{This data is a variant of the data from the Bioconductor \code{golubEsets} package.}
 \references{
  Molecular Classification of Cancer: Class Discovery and Class Prediction by Gene Expression Monitoring, Science, 531-537, 1999, T. R. Golub and D. K. Slonim and P. Tamayo and C. Huard and M. Gaasenbeek and J. P. Mesirov and H. Coller and M.L. Loh and J. R. Downing and M. A. Caligiuri and C. D. Bloomfield and E. S. Lander
  
